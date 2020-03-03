@@ -9,7 +9,5 @@ A routing engine that routes incoming chat and audio call requests to the right 
 
 ## Usage
 ```
-1. npm install
-2. npm start
 ```
 Running on localhost:3000
