@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Launcher } from "react-chat-window";
-import "./App.css";
+import Navigation from '../components/Navigation';
+// import "./App.css";
 
 class App extends Component {
   state = {
@@ -41,6 +42,7 @@ class App extends Component {
           messageList={this.state.messageList}
           showEmoji
         />
+        <Navigation/>
       </div>
     );
   }

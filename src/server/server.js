@@ -3,6 +3,19 @@ const rainbowSDK = require('rainbow-node-sdk')
 
 const app = express();
 
+// Managing User & Guests
+
+// Create accounts on rbw CLI first 
+// Admins Service
+// IM Service
+
+
+// Start the SDK
+rainbowSDK.start().then(() => {
+    // Do something when the SDK is connected to Rainbow
+    // ... 
+});
+
 
 
 
