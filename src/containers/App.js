@@ -42,7 +42,7 @@ class App extends Component {
           messageList={this.state.messageList}
           showEmoji
         />
-        <Navigation/>
+        {/* <Navigation/> */}
       </div>
     );
   }
