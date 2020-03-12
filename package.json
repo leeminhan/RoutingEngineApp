@@ -9,13 +9,17 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "mongodb": "^3.5.5",
+    "mongoose": "^5.9.4",
     "path": "^0.12.7",
     "rainbow-node-sdk": "^1.66.1",
+    "rainbow-web-sdk": "^1.68.0-beta.1",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-chat-window": "^1.2.1",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.1"
+    "react-scripts": "3.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,6 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }

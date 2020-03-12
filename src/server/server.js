@@ -1,7 +1,11 @@
 const express = require('express');
-const rainbowSDK = require('rainbow-node-sdk')
+const RainbowSDK = require('rainbow-node-sdk');
+const options = require('./options'); // Import Configurations
 
 const app = express();
+
+const rainbow = new RainbowSDK(options);
+
 
 // Managing User & Guests
 
@@ -10,14 +14,12 @@ const app = express();
 // IM Service
 
 
-// Start the SDK
-rainbowSDK.start().then(() => {
+// 1. Start the SDK
+rainbow.start().then(() => {
     // Do something when the SDK is connected to Rainbow
     // ... 
+    console.log('Connected to Rainbow')
 });
-
-
-
 
 app.listen(8000, function() {
     console.log('App running on port 8000');

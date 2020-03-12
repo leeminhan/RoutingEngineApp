@@ -1,11 +1,26 @@
 import React, { Component } from "react";
 import { Launcher } from "react-chat-window";
-import Navigation from '../components/Navigation';
+import Navigation from "../components/Navigation";
+import rainbowSDK from "rainbow-web-sdk";
+import config from './Config';
 // import "./App.css";
 
 class App extends Component {
   state = {
-    messageList: []
+    messageList: [],
+    user: "",
+    password: "",
+    status: ""
+  };
+
+  onLoaded = () => {
+    console.log("[DEMO] :: On SDK Loaded !");
+
+    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function() {
+        console.log("[DEMO] :: Rainbow SDK is initialized!");
+    }).catch(function(err) {
+        console.log("[DEMO] :: Something went wrong with the SDK...", err);
+    });
   };
 
   _onMessageWasSent(message) {
@@ -42,7 +57,7 @@ class App extends Component {
           messageList={this.state.messageList}
           showEmoji
         />
-        <Navigation/>
+        {/* <Navigation/> */}
       </div>
     );
   }
