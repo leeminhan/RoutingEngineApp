@@ -3,19 +3,25 @@ import { Launcher } from "react-chat-window";
 import Navigation from "../components/Navigation";
 import rainbowSDK from "rainbow-web-sdk";
 import config from './Config';
+import axios from "axios";
+import { ThemeProvider } from '@livechat/ui-kit'
+
 // import "./App.css";
 
 class App extends Component {
   state = {
     messageList: [],
+    firstName: "",
+    lastName: "",
+    language: "",
+    problem: "",
     user: "",
     password: "",
     status: ""
   };
 
-  onLoaded = () => {
-    console.log("[DEMO] :: On SDK Loaded !");
-
+  onLoadedHandler = () => {
+    console.log("[DEMO] :: On SDK Loaded !")
     rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function() {
         console.log("[DEMO] :: Rainbow SDK is initialized!");
     }).catch(function(err) {
@@ -43,6 +49,32 @@ class App extends Component {
       });
     }
   }
+  
+  /* When use clicks submit, list of events that need to happen. 
+
+  1. To Create Guest User Account
+  createAccHandler(): Sends a axios.post to a route in backend that creates a Guest Acc
+  That route will also send back guest credentials to frontend for the user to be signed in
+
+  2. IM Service
+  
+  3. User information will be uploaded to database
+    - To Create a axios.post to a specific route 
+  */
+
+
+
+  // onClickHandler = () => {
+  //   axios.post
+  // } 
+
+  /* Connection Services -> User Sign In
+    1. Need a axios.post 
+    2. 
+  */
+
+  /* IM Service - When User sends a message */
+
 
   render() {
     return (
@@ -57,6 +89,10 @@ class App extends Component {
           messageList={this.state.messageList}
           showEmoji
         />
+        <ThemeProvider>
+          
+        </ThemeProvider>
+
         {/* <Navigation/> */}
       </div>
     );
