@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+ .img {
+   background-image: url("../Agent2.jpg");
+   min-height: 600px;
+   min-width: 100%;
+   background-attachment:fixed;
+   background-size:cover;
+   background-repeat:no-repeat;
+   background-position:center;
+ }
+
+ .img img {
+    position: fixed;
+    top: 90px;
+    left: 90px;
+    height: 400px;
+    width: 400px;
+
+   
+    
+ }
+
+ .main{
+   background-color: #f7f7f7;
+   min-height:900px
+ }
+
+ .NavTabs {
+   position: relative;
+   top: -60px;
+   min-height: 100%;
+   
+  
+   
+ }
+
+ .Navbar{
+   position: fixed;
+   top:0;
+ }
