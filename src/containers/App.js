@@ -4,7 +4,7 @@ import Navigation from "../components/Navigation";
 import rainbowSDK from "rainbow-web-sdk";
 import config from './Config';
 import axios from "axios";
-import { ThemeProvider } from '@livechat/ui-kit'
+import Button from "../components/Button";
 
 // import "./App.css";
 
@@ -50,7 +50,7 @@ class App extends Component {
     }
   }
   
-  /* When use clicks submit, list of events that need to happen. 
+  /* When user clicks submit, list of events that need to happen. 
 
   1. To Create Guest User Account
   createAccHandler(): Sends a axios.post to a route in backend that creates a Guest Acc
@@ -60,13 +60,23 @@ class App extends Component {
   
   3. User information will be uploaded to database
     - To Create a axios.post to a specific route 
+
+  4. 
   */
 
 
 
-  // onClickHandler = () => {
-  //   axios.post
-  // } 
+  onClickHandler = () => {
+    console.log("Hello world")
+    this.setState({
+      "firstName": "MinHan"
+    })
+    axios.post("/", this.state.firstName).then(res => {
+      console.log("Upload To Database Successful")
+    }).catch(error => {
+      console.log(error)
+    })
+  } 
 
   /* Connection Services -> User Sign In
     1. Need a axios.post 
@@ -81,7 +91,7 @@ class App extends Component {
       <div>
         <Launcher
           agentProfile={{
-            teamName: "Welcome To CPF Board",
+            teamName: "Agent <Name>",
             imageUrl:
               "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
           }}
@@ -89,11 +99,7 @@ class App extends Component {
           messageList={this.state.messageList}
           showEmoji
         />
-        <ThemeProvider>
-          
-        </ThemeProvider>
-
-        {/* <Navigation/> */}
+        <Button onClick={this.onClickHandler}/>
       </div>
     );
   }
