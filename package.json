@@ -25,12 +25,7 @@
     "react-chat-elements": "^10.8.0",
     "react-chat-window": "^1.2.1",
     "react-dom": "^16.12.0",
-<<<<<<< HEAD
     "react-scripts": "3.4"
-=======
-    "react-scripts": "3.4",
-    "typeface-roboto": "0.0.75"
->>>>>>> 8e69f9e414585b208ce138048ad38e76301f9406
   },
   "scripts": {
     "start": "react-scripts start",
