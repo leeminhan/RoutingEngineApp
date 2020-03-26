@@ -32,6 +32,9 @@ describe('Test insert function', () => {
     console.log("User already exists!");
   } 
   });
+
+  
+
 });
 
 
