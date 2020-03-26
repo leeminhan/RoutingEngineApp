@@ -1,27 +1,28 @@
-.App {
-  text-align: center;
+.img {
+  background-image: url("../Images/Background.png");
+  min-height: 700px;
+  min-width: 100%;
+  background-attachment:fixed;
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  position: relative;
+  top: -70px; 
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.prefForm {
+  position: relative;
+  top: -50px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.formSection {
+.formSection, .titleSection {
   height: 200px;
   background-color: #FFFFFF;
+  text-align: center;
   
 }
 
-.App-link {
-  color: #61dafb;
-}
 
 .submitButton {
   display: flex;
@@ -29,9 +30,9 @@
 }
 
 .custom-btn {
-  background: transparent;
-  color: #000000;
-  border-color: #000000;
+  background: transparent !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
   padding: 5px 10px;
   text-transform: uppercase;
 }
