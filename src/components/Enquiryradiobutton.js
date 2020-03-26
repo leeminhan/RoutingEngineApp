@@ -2,49 +2,53 @@ import React from "react";
 import "./Radiobutton.css";
 
 
-const Enquiryradiobutton = props => {
+const Enquiryradiobutton = ({value,onChange}) => {
     
     return (
-        <div>
+        <div
+        name = "problem"
+        value={value}
+        onChange={onChange}
+        class = "problem">
+
             <label>
-                <input type="radio" name="Enquiry" defaultValue="small" />
-                <img id = 'Radioimg' src={require('../Images/Educationschemes.png')}/>
+                <input type="radio" name="problem" value="1" />
+                <img id = 'Radioimg' src={require('../Images/Educationschemes.svg')}/>
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Enquiry" defaultValue="big" />
-                <img id = 'Radioimg' src={require('../Images/Healthcareschemes.png')} />
+                <input type="radio" name="problem" value="2" />
+                <img id = 'Radioimg' src={require('../Images/Healthcareschemes.svg')} />
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Enquiry" defaultValue="small"  />
-                <img id = 'Radioimg' src={require('../Images/Housingschemes.png')}/>
+                <input type="radio" name="problem" value="3"  />
+                <img id = 'Radioimg' src={require('../Images/Housingschemes.svg')}/>
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Enquiry" defaultValue="big" />
-                <img id = 'Radioimg' src={require('../Images/Accountstatement.png')} />
-            </label>
-            <br></br>
-            
-            <label>
-                <input type="radio" name="Enquiry" defaultValue="small" />
-                <img id = 'Radioimg' src={require('../Images/Insurance.png')}/>
+                <input type="radio" name="problem" defaultValue="4" />
+                <img id = 'Radioimg' src={require('../Images/Accountstatement.svg')} />
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Enquiry" defaultValue="big" />
-                <img id = 'Radioimg' src={require('../Images/Selfemployment.png')} />
+                <input type="radio" name="problem" value="5" />
+                <img id = 'Radioimg' src={require('../Images/Insurance.svg')}/>
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Enquiry" defaultValue="small"  />
-                <img id = 'Radioimg' src={require('../Images/Investment.png')}/>
+                <input type="radio" name="problem" value="6" />
+                <img id = 'Radioimg' src={require('../Images/Selfemployment.svg')} />
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Enquiry" defaultValue="big" />
-                <img id = 'Radioimg' src={require('../Images/Retirement.png')} />
+                <input type="radio" name="problem" value="7"  />
+                <img id = 'Radioimg' src={require('../Images/Investment.svg')}/>
+            </label>
+            <span style={{display: 'inline-block', width: '10px'}} />
+            <label>
+                <input type="radio" name="problem" value="8" />
+                <img id = 'Radioimg' src={require('../Images/Retirement.svg')} />
             </label>
         </div>
     );

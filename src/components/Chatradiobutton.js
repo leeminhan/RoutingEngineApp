@@ -2,22 +2,31 @@ import React from "react";
 import "./Radiobutton.css";
 
 
-const Chatradiobutton = props => {
+const Chatradiobutton = ({value,onChange}) => {
+    
     return (
-        <div>
+        <div 
+        name = "chatMode"
+        value={value}
+        onChange={onChange}
+        class = 'chatMode'>
+
             <label>
-                <input type="radio" name="Chatmode" defaultValue="small"  />
-                <img id = 'Radioimg' src={require('../Images/Chatroom.png')}/>
+                <input type="radio" name="chatmode" value= "1"  />
+                <img id = 'Radioimg' src={require('../Images/Chatmessaging.svg')}/>
+                Chat Messaging
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Chatmode" defaultValue="big" />
-                <img id = 'Radioimg' src={require('../Images/Videocall.png')} />
+                <input type="radio" name="chatmode" value="2" />
+                <img id = 'Radioimg' src={require('../Images/Videocall.svg')} />
+                Video Calling
             </label>
             <span style={{display: 'inline-block', width: '10px'}} />
             <label>
-                <input type="radio" name="Chatmode" defaultValue="big" />
-                <img id = 'Radioimg' src={require('../Images/Phonecall.png')} />
+                <input type="radio" name="chatmode" value="3" />
+                <img id = 'Radioimg' src={require('../Images/Phonecall.svg')} />
+                Voice Calling
             </label>
         </div>
     );

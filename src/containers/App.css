@@ -1,77 +1,41 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
- .img {
-   background-image: url("../Agent2.jpg");
-   min-height: 600px;
-   min-width: 100%;
-   background-attachment:fixed;
-   background-size:cover;
-   background-repeat:no-repeat;
-   background-position:center;
- }
-
- .img img {
-    position: fixed;
-    top: 90px;
-    left: 90px;
-    height: 400px;
-    width: 400px;
-
-   
-    
- }
-
- .main{
+.main{
    background-color: #f7f7f7;
    min-height:900px
  }
 
- .NavTabs {
-   position: relative;
-   top: -60px;
-   min-height: 100%;
-   
-  
-   
- }
+.img {
+  background-image: url("../Images/Background.png");
+  min-height: 700px;
+  min-width: 100%;
+  background-attachment:fixed;
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  position: relative;
+  top: -70px; 
+}
 
- .Navbar{
-   position: fixed;
-   top:0;
- }
+.prefForm {
+  background-color: #FFFFFF;
+  position: relative;
+  top:-30px;
+  margin: 0;
+}
+
+.titleSection {
+  height: 100px;
+  background-color: #FFFFFF;
+  margin: 0;
+}
+
+.formSection {
+  height: 200px;
+  background-color: #FFFFFF;
+}
+
+.formTitle {
+  color: #000000  !important;
+  text-align: center ;
+
+}
+

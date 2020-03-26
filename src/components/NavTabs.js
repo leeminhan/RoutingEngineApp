@@ -61,13 +61,19 @@ function LinkTab(props) {
 
 //-------------------------------------------------------------------------------------------------------------------------
 
-const NavTabs = props => {
+
+
+const NavTabs = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // const handleStateCallBack = (fname, lname, lang,chat,prob) =>{
+  //   parentStateCallBack(fname, lname, lang,chat,prob);
+  // }
 
   return (
     <div className={classes.root}>
@@ -89,7 +95,7 @@ const NavTabs = props => {
             </AppBar>
           </div>
             <TabPanel value={value} index={0}>
-                <PrefForm/>
+                <PrefForm statesCallBack = {props.parentStateCallBack}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 Page Two

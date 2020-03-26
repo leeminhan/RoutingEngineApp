@@ -13,56 +13,76 @@
 
 /* CHECKED STYLES */
 [type=radio]:checked + img {
-  outline: 3px solid #00205B;
+  outline: 3px solid #000000;
 }
 
 #Radioimg {
     height: 100px;
     width: 100px;
-    background-color: #ffa300;
-}
-
-.Navbar {
-    background-color: #00205B;
-    
-    position: fixed;
-    top: 0;
-}
-.inactive, .Navbar.brand {
-    color: #fff !important; 
-    text-decoration: none;
-}
-
-.active, .inactive:hover , .Navbar.brand{
-    color: #ffa300 !important; 
-    text-decoration: none;
-}
-
-.AppBar {
-    background-color: #00205B ;
+    background-color: #ffffff;
 }
 
 .custom-btn {
-    background: #00205B;
-    color: #ffffff;
-    border-color: #00205B;
+    background: transparent;
+    color: #000000;
+    border-color: #000000;
     padding: 5px 10px;
     text-transform: uppercase;
 }
 
 .custom-btn:hover, .custom-btn:focus, .custom-btn:active{
-    background: #00205B;
-    color: #ffa300;
-    border-color: #00205B;
+    background: #00205B !important;
+    color: #ffa300 !important;
+    border-color: #00205B !important;
     padding: 5px 10px;
     text-transform: uppercase;
 }
 
-.myTabs {
-    color: #ffffff !important ; 
+.formtitle {
+    color: #000000 !important;
+    text-align: center;
 }
 
-.myTabs:hover, .myTabs:focus, .custom-btn:active {
-    color: #ffa300 !important ; 
+.chatMode, .problem, .language, .nameInput{
+    display: flex;
+    justify-content: center;
 }
 
+.NavButtons, .Logo {
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+  
+}
+
+.NavButtons:hover{
+    color: #02452a !important;
+    font-weight: bolder !important;
+}
+
+.NavBar {
+      width: 100%;
+      background-color: transparent !important;
+}
+
+.SearchButton {
+    color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+    padding: 5px 10px !important;
+}
+
+.SearchButton:hover {
+    background-color: #02452a !important;
+}
+
+.SearchButton:active {
+    background-color: #02452a !important;
+    font-weight: bold;
+}
+
+
+label {
+    width: 100px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
