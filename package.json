@@ -41,12 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-<<<<<<< Updated upstream
-    "jest": "^25.1.0"
-=======
-    "jest": "^25.2.0"
->>>>>>> Stashed changes
   }
 }
