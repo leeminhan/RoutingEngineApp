@@ -29,7 +29,8 @@ class App extends Component {
       user: "",
       password: "",
       status: ""
-    };
+    }
+    this.onLoadedHandler = this.onLoadedHandler.bind(this)
   }
 
   onLoadedHandler = () => {
