@@ -20,7 +20,7 @@ router.post('/users', (req,res) => {
             if(error){
                 return console.log("Unable to connect to database")
             }
-            console.log("Connected correctly!")
+            console.log("Connected to Database successfully!")
         
             const db = client.db(databaseName)
             
@@ -31,12 +31,11 @@ router.post('/users', (req,res) => {
                 // chatMode: "chat",
                 // top: "CPF Pay Out/ Maybe problem 1"//top: type of problem
             }).then((result) => {
-                console.log(result)
+                res.status(200).send(info)
             }).catch((error) => {
                 console.log(error)
             })
         })
-        res.status(200).send(info)
     }catch(error){
         res.status(500).send()
     }

@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 
 // Instantiate 
-// const rainbow = new RainbowSDK(options);
+const rainbow = new RainbowSDK(options);
 const timeTolive = 3600;
 
 // Managing User & Guests
@@ -30,31 +30,31 @@ app.use(bodyParser.json());
 app.use(indexRouter);
 
 /* Admin Service - Create Guest Account For User*/
-// app.post("/", async(req,res) => {
-//     try{
-//         //Uncomment this once post from frontend to this route is done
-//         // Change to req.body once done
-//         const firstName = "firstName";
-//         const lastName = "lastName";
-//         const language = "en-US";
-//         // console.log(req.body)
-//         //Consider changing to async await once done with other routes
+app.post("/", async(req,res) => {
+    try{
+        //Uncomment this once post from frontend to this route is done
+        // Change to req.body once done
+        const firstName = "firstName";
+        const lastName = "lastName";
+        const language = "en-US";
+        console.log(req.body)
+        //Consider changing to async await once done with other routes
 
-//         rainbow.admin.createGuestUser(firstName, lastName, [language],[timeTolive]).then((loginCredentials) => {
-//             console.log("Guest User Account successfully created")
+        rainbow.admin.createGuestUser(firstName, lastName, [language],[timeTolive]).then((loginCredentials) => {
+            console.log("Guest User Account successfully created")
 
-//             //Send back details to frontend for User to Login with Guest User Account
-//             res.status(200).send(loginCredentials)
+            //Send back details to frontend for User to Login with Guest User Account
+            res.status(200).send(loginCredentials)
 
-//         }).catch((error)=>{
-//             console.log(`Failed to Create Guest Account; Error: ${error}`)
-//         })
+        }).catch((error)=>{
+            console.log(`Failed to Create Guest Account; Error: ${error}`)
+        })
 
-//     }catch(error){
-//         res.status(404).send(error)
-//         console.log("Creating of Guess Account Failed")
-//     }
-// })
+    }catch(error){
+        res.status(404).send(error)
+        console.log("Creating of Guess Account Failed")
+    }
+})
 
 app.listen(8000, () => {
     console.log('App running on port 8000');

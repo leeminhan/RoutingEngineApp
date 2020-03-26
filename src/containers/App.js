@@ -18,35 +18,34 @@ import "./App.css";
 class App extends Component {
   constructor(props) {
     super(props)
-    this.submitHandler = this.submitHandler.bind(this)
     this.state = {
       messageList: [],
       firstName: "",
       lastName: "",
-      language: 0,
+      language: "en-us",
       chatMode: 0,
       top: 0,
       user: "",
       password: "",
       status: ""
     }
-    this.onLoadedHandler = this.onLoadedHandler.bind(this)
+    // this.onLoadedHandler = this.onLoadedHandler.bind(this)
   }
 
   onLoadedHandler = () => {
     console.log("[DEMO] :: On SDK Loaded !")
-    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function () {
+    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then((account) => {
       console.log("[DEMO] :: Rainbow SDK is initialized!");
     }).catch(function (err) {
       console.log("[DEMO] :: Something went wrong with the SDK...", err);
     });
   };
 
-  
-
 //------------------------------------------------Form event handlers-----------------------------------------------
   submitHandler = () => {
     console.log(this.state);
+    this.onLoadedHandler()
+    this.createGuestAccHandler()
     this.uploadDatabaseHandler()
   }
 
@@ -73,6 +72,20 @@ class App extends Component {
   uploadDatabaseHandler = () =>{
     axios.post("http://localhost:8000/users", this.state).then(() => {
       console.log("Uploaded user information to Database")
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+  
+  createGuestAccHandler = () => {
+    const user_info = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      language: this.state.language
+    }
+
+    axios.post("/", user_info).then((result) => {
+      console.log(result)
     }).catch(error => {
       console.log(error)
     })
@@ -169,7 +182,7 @@ class App extends Component {
           
           <div className = "submitButton">
             <br></br>
-            <Button className="custom-btn" onClick = {this.submitHandler}>
+            <Button className="custom-btn" onClick = {this.submitHandler.bind(this)}>
               Submit
             </Button>
           </div>
