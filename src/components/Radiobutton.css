@@ -22,22 +22,6 @@
     background-color: #ffffff;
 }
 
-.custom-btn {
-    background: transparent;
-    color: #000000;
-    border-color: #000000;
-    padding: 5px 10px;
-    text-transform: uppercase;
-}
-
-.custom-btn:hover, .custom-btn:focus, .custom-btn:active{
-    background: #00205B !important;
-    color: #ffa300 !important;
-    border-color: #00205B !important;
-    padding: 5px 10px;
-    text-transform: uppercase;
-}
-
 .formtitle {
     color: #000000 !important;
     text-align: center;

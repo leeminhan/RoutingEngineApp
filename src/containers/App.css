@@ -13,26 +13,33 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.formSection {
+  height: 200px;
+  background-color: #FFFFFF;
+  
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.submitButton {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-btn {
+  background: transparent;
+  color: #000000;
+  border-color: #000000;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+
+.custom-btn:hover, .custom-btn:focus, .custom-btn:active{
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #000000 !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
 }
