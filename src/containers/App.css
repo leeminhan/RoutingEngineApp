@@ -31,6 +31,7 @@
 .formSection {
   height: 200px;
   background-color: #FFFFFF;
+  
 }
 
 .formTitle {
@@ -39,3 +40,23 @@
 
 }
 
+.submitButton {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-btn {
+  background: transparent;
+  color: #000000;
+  border-color: #000000;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+
+.custom-btn:hover, .custom-btn:focus, .custom-btn:active{
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #000000 !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}

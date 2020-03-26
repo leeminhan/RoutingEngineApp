@@ -158,7 +158,8 @@ class App extends Component {
             <Enquiryradiobutton value = {this.state.problem} onChange = {this.onProblemChangeHandler.bind(this)}/>
           </div>
           
-          <div>
+          <div className = "submitButton">
+            <br></br>
             <Button className="custom-btn" onClick = {this.submitHandler}>
               Submit
             </Button>
