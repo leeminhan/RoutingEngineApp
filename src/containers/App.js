@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-<<<<<<< HEAD
 import { Launcher } from "react-chat-window";
 import Navigation from "../components/Navigation";
 import rainbowSDK from "rainbow-web-sdk";
@@ -28,118 +27,11 @@ class App extends Component {
     this.setState({
       messageList: [...this.state.messageList, message]
     });
-=======
-import rainbowSDK from "rainbow-web-sdk";
-import config from './Config';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from "axios";
-import { ThemeProvider } from '@livechat/ui-kit';
-
-//------------------------------------------------Components----------------------------------------------------
-import { Grid, TextField } from '@material-ui/core';
-import {Button} from "react-bootstrap";
-import Navigation from '../components/Navigation';
-import Chatradiobutton from '../components/Chatradiobutton';
-import Languageradiobutton from '../components/Languageradiobutton';
-import Enquiryradiobutton from '../components/Enquiryradiobutton';
-import { Launcher } from "react-chat-window";
-import "./App.css";
-
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.submitHandler = this.submitHandler.bind(this)
-    this.state = {
-      messageList: [],
-      firstName: "",
-      lastName: "",
-      language: 0,
-      chatMode: 0,
-      top: 0,
-      user: "",
-      password: "",
-      status: ""
-    };
-  }
-
-
-  onLoadedHandler = () => {
-    console.log("[DEMO] :: On SDK Loaded !")
-    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function () {
-      console.log("[DEMO] :: Rainbow SDK is initialized!");
-    }).catch(function (err) {
-      console.log("[DEMO] :: Something went wrong with the SDK...", err);
-    });
-  };
-
-  
-
-//------------------------------------------------Form event handlers-----------------------------------------------
-  submitHandler = () => {
-    console.log(this.state);
-  }
-
-  onFirstNameChangeHandler = (event) => {
-    this.setState({firstName: event.target.value});
-  }
-
-  onLastNameChangeHandler = (event) => {
-    this.setState({lastName: event.target.value});
-  }
-
-  onChatModeChangeHandler = (event) => {
-    this.setState({chatMode: parseInt(event.target.value,10)});
-  }
-
-  onLanguageChangeHandler = (event) => {
-    this.setState({language: parseInt(event.target.value,10)});
-  }
-
-  onProblemChangeHandler = (event) => {
-    this.setState({top: parseInt(event.target.value,10)});
-  }
-
-//------------------------------------------------Launcher event handlers-----------------------------------------------
-
-
-  _onMessageWasSent(message) {
-    this.setState({
-      messageList: [...this.state.messageList, message]
-    })
->>>>>>> Keith
   }
 
   _sendMessage(text) {
     if (text.length > 0) {
       this.setState({
-<<<<<<< HEAD
-        messageList: [
-          ...this.state.messageList,
-          {
-            author: "them",
-            type: "text",
-            data: { text }
-          }
-        ]
-      });
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        <Launcher
-          agentProfile={{
-            teamName: "Welcome To CPF Board",
-            imageUrl:
-              "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
-          }}
-          onMessageWasSent={this._onMessageWasSent.bind(this)}
-          messageList={this.state.messageList}
-          showEmoji
-        />
-        {/* <Navigation/> */}
-=======
         messageList: [...this.state.messageList, {
           author: 'them',
           type: 'text',
@@ -217,7 +109,8 @@ class App extends Component {
             <Enquiryradiobutton value = {this.state.problem} onChange = {this.onProblemChangeHandler.bind(this)}/>
           </div>
           
-          <div>
+          <div className = "submitButton">
+            <br></br>
             <Button className="custom-btn" onClick = {this.submitHandler}>
               Submit
             </Button>
@@ -234,7 +127,6 @@ class App extends Component {
           />
         </div>
 
->>>>>>> Keith
       </div>
     );
   }
