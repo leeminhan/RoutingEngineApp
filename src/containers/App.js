@@ -118,11 +118,6 @@ class App extends Component {
     2. 
   */
 
-  /* IM Service - When User sends a message */
-
-
-
-
   /* When use clicks submit, list of events that need to happen. 
 
   1. To Create Guest User Account
@@ -134,12 +129,6 @@ class App extends Component {
   3. User information will be uploaded to database
     - To Create a axios.post to a specific route 
   */
-
-
-
-  // onClickHandler = () => {
-  //   axios.post
-  // } 
 
   /* Connection Services -> User Sign In
     1. Need a axios.post 
@@ -206,6 +195,10 @@ class App extends Component {
               showEmoji
           />
         </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8e69f9e414585b208ce138048ad38e76301f9406
       </div>
     );
   }
