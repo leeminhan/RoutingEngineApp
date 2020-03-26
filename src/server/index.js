@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = new express.Router();
 const axios = require('axios');
 const RainbowSDK = require('rainbow-node-sdk');
 
@@ -9,12 +9,12 @@ const MongoClient = mongodb.MongoClient //gives us access to function necessary 
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'RoutingEngineDB'
 
-
 // Route to Create Guest Account --> Send back credentials to frontend
 
 // Route to upload new user information to Database
-router.post('/upload', (req,res) => {
-    const info = req.body()
+router.post('/users', (req,res) => {
+    const info = req.body
+    console.log(info)
     try{
         MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
             if(error){
@@ -36,7 +36,7 @@ router.post('/upload', (req,res) => {
                 console.log(error)
             })
         })
-        res.status(200).send()
+        res.status(200).send(info)
     }catch(error){
         res.status(500).send()
     }
