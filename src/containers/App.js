@@ -100,18 +100,6 @@ class App extends Component {
       });
     }
   }
-  
-  onClickHandler = () => {
-    console.log("Hello world")
-    this.setState({
-      "firstName": "MinHan"
-    })
-    axios.post("/", this.state.firstName).then(res => {
-      console.log("Upload To Database Successful")
-    }).catch(error => {
-      console.log(error)
-    })
-  } 
 
   /* Connection Services -> User Sign In
     1. Need a axios.post 
@@ -195,10 +183,6 @@ class App extends Component {
               showEmoji
           />
         </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e69f9e414585b208ce138048ad38e76301f9406
       </div>
     );
   }
