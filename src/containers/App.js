@@ -1,40 +1,4 @@
 import React, { Component } from "react";
-<<<<<<< HEAD
-import { Launcher } from "react-chat-window";
-import Navigation from "../components/Navigation";
-import rainbowSDK from "rainbow-web-sdk";
-import config from './Config';
-import axios from "axios";
-import Button from "../components/Button";
-
-// import "./App.css";
-
-class App extends Component {
-  state = {
-    messageList: [],
-    firstName: "",
-    lastName: "",
-    language: "",
-    problem: "",
-    user: "",
-    password: "",
-    status: ""
-  };
-
-  onLoadedHandler = () => {
-    console.log("[DEMO] :: On SDK Loaded !")
-    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function() {
-        console.log("[DEMO] :: Rainbow SDK is initialized!");
-    }).catch(function(err) {
-        console.log("[DEMO] :: Something went wrong with the SDK...", err);
-    });
-  };
-
-  _onMessageWasSent(message) {
-    this.setState({
-      messageList: [...this.state.messageList, message]
-    });
-=======
 import rainbowSDK from "rainbow-web-sdk";
 import config from './Config';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -68,7 +32,6 @@ class App extends Component {
     };
   }
 
-
   onLoadedHandler = () => {
     console.log("[DEMO] :: On SDK Loaded !")
     rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function () {
@@ -83,6 +46,7 @@ class App extends Component {
 //------------------------------------------------Form event handlers-----------------------------------------------
   submitHandler = () => {
     console.log(this.state);
+    this.uploadDatabaseHandler()
   }
 
   onFirstNameChangeHandler = (event) => {
@@ -104,6 +68,14 @@ class App extends Component {
   onProblemChangeHandler = (event) => {
     this.setState({top: parseInt(event.target.value,10)});
   }
+  
+  uploadDatabaseHandler = () =>{
+    axios.post("http://localhost:8000/users", this.state).then(() => {
+      console.log("Uploaded user information to Database")
+    }).catch(error => {
+      console.log(error)
+    })
+  }
 
 //------------------------------------------------Launcher event handlers-----------------------------------------------
 
@@ -112,13 +84,11 @@ class App extends Component {
     this.setState({
       messageList: [...this.state.messageList, message]
     })
->>>>>>> Keith
   }
 
   _sendMessage(text) {
     if (text.length > 0) {
       this.setState({
-<<<<<<< HEAD
         messageList: [
           ...this.state.messageList,
           {
@@ -131,22 +101,6 @@ class App extends Component {
     }
   }
   
-  /* When user clicks submit, list of events that need to happen. 
-
-  1. To Create Guest User Account
-  createAccHandler(): Sends a axios.post to a route in backend that creates a Guest Acc
-  That route will also send back guest credentials to frontend for the user to be signed in
-
-  2. IM Service
-  
-  3. User information will be uploaded to database
-    - To Create a axios.post to a specific route 
-
-  4. 
-  */
-
-
-
   onClickHandler = () => {
     console.log("Hello world")
     this.setState({
@@ -167,32 +121,6 @@ class App extends Component {
   /* IM Service - When User sends a message */
 
 
-  render() {
-    return (
-      <div>
-        <Launcher
-          agentProfile={{
-            teamName: "Agent <Name>",
-            imageUrl:
-              "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png"
-          }}
-          onMessageWasSent={this._onMessageWasSent.bind(this)}
-          messageList={this.state.messageList}
-          showEmoji
-        />
-<<<<<<< HEAD
-        <Button onClick={this.onClickHandler}/>
-=======
-        {/* <Navigation/> */}
-=======
-        messageList: [...this.state.messageList, {
-          author: 'them',
-          type: 'text',
-          data: { text }
-        }]
-      })
-    }
-  }
 
 
   /* When use clicks submit, list of events that need to happen. 
@@ -224,7 +152,6 @@ class App extends Component {
   render() {
     return (
       <div className='main'>
-
         <div className='Navbar'>
           <Navigation />
         </div>
@@ -278,9 +205,6 @@ class App extends Component {
               showEmoji
           />
         </div>
-
->>>>>>> Keith
->>>>>>> 6ffb9ffe58ae8f3f0f20ba9fbee31eb18428b025
       </div>
     );
   }

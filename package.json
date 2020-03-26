@@ -3,13 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-    "@material-ui/core": "^4.9.7",
-=======
     "@livechat/ui-kit": "^0.4.0-10",
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
->>>>>>> 6ffb9ffe58ae8f3f0f20ba9fbee31eb18428b025
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
@@ -29,12 +25,7 @@
     "react-chat-elements": "^10.8.0",
     "react-chat-window": "^1.2.1",
     "react-dom": "^16.12.0",
-<<<<<<< HEAD
     "react-scripts": "3.4"
-=======
-    "react-scripts": "3.4",
-    "typeface-roboto": "0.0.75"
->>>>>>> Keith
   },
   "scripts": {
     "start": "react-scripts start",
