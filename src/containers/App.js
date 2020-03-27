@@ -18,35 +18,37 @@ import "./App.css";
 class App extends Component {
   constructor(props) {
     super(props)
-    this.submitHandler = this.submitHandler.bind(this)
     this.state = {
       messageList: [],
       firstName: "",
       lastName: "",
-      language: 0,
+      language: "en-us",
       chatMode: 0,
       top: 0,
       user: "",
       password: "",
       status: ""
-    };
+      conversation : NULL
+    }
+    // this.onLoadedHandler = this.onLoadedHandler.bind(this)
   }
 
   onLoadedHandler = () => {
     console.log("[DEMO] :: On SDK Loaded !")
-    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then(function () {
+    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then((account) => {
       console.log("[DEMO] :: Rainbow SDK is initialized!");
     }).catch(function (err) {
       console.log("[DEMO] :: Something went wrong with the SDK...", err);
     });
   };
 
-  
-
 //------------------------------------------------Form event handlers-----------------------------------------------
   submitHandler = () => {
     console.log(this.state);
-    this.uploadDatabaseHandler()
+    this.onLoadedHandler();
+    this.createGuestAccHandler();
+    this.uploadDatabaseHandler();
+    this.createChatHandler(); //fill in someones ID
   }
 
   onFirstNameChangeHandler = (event) => {
@@ -68,6 +70,8 @@ class App extends Component {
   onProblemChangeHandler = (event) => {
     this.setState({top: parseInt(event.target.value,10)});
   }
+
+//------------------------------------------------Rainbow Chat functions-----------------------------------------------
   
   uploadDatabaseHandler = () =>{
     axios.post("http://localhost:8000/users", this.state).then(() => {
@@ -76,6 +80,51 @@ class App extends Component {
       console.log(error)
     })
   }
+  
+  createGuestAccHandler = () => {
+    const user_info = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      language: this.state.language
+    }
+
+    axios.post("/", user_info).then((result) => {
+      console.log(result)
+      this.setState({user : result.data.guestID});
+      this.setState({password : result.data.guestPass});
+    }).catch(error => {
+      console.log(error)
+    })
+
+    rainbowSDK.connection.signin(guestLogin,guestPW).then((guestAccount) =>{
+      console.log(guestAccount, "account signed in");
+    })catch(error => {
+      console.log(error, "failed to sign guest in")
+    })
+  }
+
+  createChatHandler = (agentID) => {
+
+    rainbowSDK.contacts.searchContactById(agentId).then((contact) => {
+      console.log(contact, "agent contact");
+      const agentContact = contact;
+    }).catch(error => {
+      console.log(error, "failed to get agent contact");
+    })
+
+    rainbowSDK.conversations.openConversationForContact(agentContact).then((convo) => {
+      console.log(convo, "conversation created");
+      rainbowSDK.im.sendMessageToConversation(conversation, "Thank you for calling. How may I help you?");
+    }).catch(error => {
+      console.log(error, "failed to start conversation");
+    })
+  }
+
+  
+  
+
+
+
 
 //------------------------------------------------Launcher event handlers-----------------------------------------------
 
@@ -98,8 +147,16 @@ class App extends Component {
           }
         ]
       });
+
+      if (this.state.conversation != NULL) {
+        rainbowSDK.Im.sendMessageToConversation(this.state.conversation, text);
+      }
+
     }
   }
+
+
+
 
   /* Connection Services -> User Sign In
     1. Need a axios.post 
@@ -168,7 +225,7 @@ class App extends Component {
           
           <div className = "submitButton">
             <br></br>
-            <Button className="custom-btn" onClick = {this.submitHandler}>
+            <Button className="custom-btn" onClick = {this.submitHandler.bind(this)}>
               Submit
             </Button>
           </div>

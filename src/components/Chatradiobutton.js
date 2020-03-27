@@ -2,14 +2,14 @@ import React from "react";
 import "./Radiobutton.css";
 
 
-const Chatradiobutton = ({value,onChange}) => {
+const Chatradiobutton = (props) => {
     const mySpan = <span style={{display: 'inline-block', width: '30px'}} />
     
     return (
         <div 
         name = "chatMode"
-        value={value}
-        onChange={onChange}
+        value= {props.value}
+        onChange={props.onChange}
         class = 'chatMode'>
 
             <label>

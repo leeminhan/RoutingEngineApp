@@ -2,17 +2,18 @@ import React from "react";
 import "./Radiobutton.css";
 
 
-const Languageradiobutton = ({value,onChange}) =>  {
+
+const Languageradiobutton = (props) =>  {
     const mySpan = <span style={{display: 'inline-block', width: '30px'}} />
     return (
         <div
         name = "language"
-        value={value}
-        onChange={onChange}
+        value = {props.value}
+        onChange={props.onChange}
         class = "language">
 
             <label>
-                <input type="radio" name="language" value="1"  />
+                <input type="radio" name="language" value="en-us"  />
                 <img id = 'Radioimg' src={require('../Images/English.png')}/>
                 English
             </label>
