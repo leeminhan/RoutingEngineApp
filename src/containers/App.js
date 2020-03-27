@@ -27,8 +27,9 @@ class App extends Component {
       top: 0,
       user: "",
       password: "",
-      status: ""
-      conversation : NULL
+      status: "",
+      conversation : null,
+      agentContact : null
     }
     // this.onLoadedHandler = this.onLoadedHandler.bind(this)
   }
@@ -89,32 +90,33 @@ class App extends Component {
     }
 
     axios.post("/", user_info).then((result) => {
-      console.log(result)
+      console.log(result);
       this.setState({user : result.data.guestID});
       this.setState({password : result.data.guestPass});
     }).catch(error => {
-      console.log(error)
+      console.log(error);
     })
 
-    rainbowSDK.connection.signin(guestLogin,guestPW).then((guestAccount) =>{
+    rainbowSDK.connection.signin(this.state.user,this.state.password).then((guestAccount) =>{
       console.log(guestAccount, "account signed in");
-    })catch(error => {
-      console.log(error, "failed to sign guest in")
+    }).catch(error => {
+      console.log(error, "failed to sign guest in");
     })
   }
 
   createChatHandler = (agentID) => {
-
-    rainbowSDK.contacts.searchContactById(agentId).then((contact) => {
+    
+    rainbowSDK.contacts.searchContactById(agentID).then((contact) => {
       console.log(contact, "agent contact");
-      const agentContact = contact;
+      this.setState({agentContact : contact});
     }).catch(error => {
       console.log(error, "failed to get agent contact");
     })
 
-    rainbowSDK.conversations.openConversationForContact(agentContact).then((convo) => {
+    rainbowSDK.conversations.openConversationForContact(this.state.agentContact).then((convo) => {
       console.log(convo, "conversation created");
-      rainbowSDK.im.sendMessageToConversation(conversation, "Thank you for calling. How may I help you?");
+      this.setState({conversation: convo});
+      rainbowSDK.im.sendMessageToConversation(convo, "Thank you for calling. How may I help you?");
     }).catch(error => {
       console.log(error, "failed to start conversation");
     })
@@ -148,7 +150,7 @@ class App extends Component {
         ]
       });
 
-      if (this.state.conversation != NULL) {
+      if (this.state.conversation != null) {
         rainbowSDK.Im.sendMessageToConversation(this.state.conversation, text);
       }
 
