@@ -13,6 +13,7 @@ import Chatradiobutton from '../components/Chatradiobutton';
 import Languageradiobutton from '../components/Languageradiobutton';
 import Enquiryradiobutton from '../components/Enquiryradiobutton';
 import { Launcher } from "react-chat-window";
+import initialize from "../initialize"; 
 import "./App.css";
 
 class App extends Component {
@@ -29,23 +30,13 @@ class App extends Component {
       password: "",
       status: ""
     }
-    // this.onLoadedHandler = this.onLoadedHandler.bind(this)
+    initialize();
   }
-
-  onLoadedHandler = () => {
-    console.log("[DEMO] :: On SDK Loaded !")
-    rainbowSDK.initialize(config.applicationID, config.applicationSecret).then((account) => {
-      console.log("[DEMO] :: Rainbow SDK is initialized!");
-    }).catch(function (err) {
-      console.log("[DEMO] :: Something went wrong with the SDK...", err);
-    });
-  };
 
 //------------------------------------------------Form event handlers-----------------------------------------------
   submitHandler = () => {
     console.log(this.state);
-    this.onLoadedHandler()
-    this.createGuestAccHandler()
+    // this.createGuestAccHandler()
     this.uploadDatabaseHandler()
   }
 
