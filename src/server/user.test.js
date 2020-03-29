@@ -71,7 +71,7 @@ describe('Test insert function', () => {
   it('delete doc in db', async () => {
     try{
       await db.delete({top: "CPF payout"}, "user");
-      const user = myDB.collection("user");
+      const user = db1.collection("user");
       const resultUser = await user.findOne({top: "CPF payout"});
       expect(resultUser).toBe(null);
     } catch(err){
