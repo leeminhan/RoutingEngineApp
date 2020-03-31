@@ -19,8 +19,8 @@ const Navigation = props => {
           </Navbar.Brand>
           <Nav className="mr-auto">
             <Nav.Link className="NavButtons" href="#Home" >Home</Nav.Link>
+            <Nav.Link className="NavButtons" href="#CPF" >CPF Board</Nav.Link>
             <Nav.Link className="NavButtons" href="#About" >About</Nav.Link>
-            <Nav.Link className="NavButtons" href="https://www.cpf.gov.sg/members" >CPF Board</Nav.Link>
             <Nav.Link  className="NavButtons" href="#FAQ">FAQ</Nav.Link>
 
             

@@ -1,6 +1,6 @@
-.img {
+.home {
   background-image: url("../Images/Background.png");
-  min-height: 700px;
+  min-height: 830px;
   min-width: 100%;
   background-attachment:fixed;
   background-size: cover;
@@ -8,39 +8,33 @@
   background-position:center;
   position: relative;
   top: -70px; 
+  background-color: #FFF0F5;
+  /* background-color: #7e91a6; */
 }
 
-.prefForm {
-  position: relative;
-  top: -50px;
-}
-
-
-.formSection, .titleSection {
-  height: 200px;
-  background-color: #FFFFFF;
-  text-align: center;
+.title {
   
+  color: #FFFFFF;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  position: relative;
+  top: 170px;
+  left: 70px;
+}
+
+.title h1 {
+  font-size: 64px;
+}
+
+.sections {
+  background-color: #FFF0F5;
+  /* background-color: #7e91a6; */
+  position: relative;
+  top: -100px;
+  /* height: 700px; */
 }
 
 
-.submitButton {
-  display: flex;
-  justify-content: center;
-}
 
-.custom-btn {
-  background: transparent !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
-  padding: 5px 10px;
-  text-transform: uppercase;
-}
 
-.custom-btn:hover, .custom-btn:focus, .custom-btn:active{
-  background: #000000 !important;
-  color: #FFFFFF !important;
-  border-color: #000000 !important;
-  padding: 5px 10px;
-  text-transform: uppercase;
-}
+
+

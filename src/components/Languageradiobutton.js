@@ -8,7 +8,7 @@ const Languageradiobutton = (props) =>  {
     return (
         <div
         name = "language"
-        value = {props.value}
+        // value = {props.value}
         onChange={props.onChange}
         class = "language">
 
@@ -19,19 +19,19 @@ const Languageradiobutton = (props) =>  {
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language" value="2" />
+                <input type="radio" name="language" value="Bahasa" />
                 <img id = 'Radioimg' src={require('../Images/Bahasa.png')} />
                 Bahasa
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language"value="3"  />
+                <input type="radio" name="language"value="Chinese"  />
                 <img id = 'Radioimg' src={require('../Images/Chinese.png')}/>
                 Chinese
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language" dvalue="4" />
+                <input type="radio" name="language" dvalue="Tamil" />
                 <img id = 'Radioimg' src={require('../Images/Tamil.png')} />
                 Tamil
             </label>

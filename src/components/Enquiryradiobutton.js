@@ -8,11 +8,11 @@ const Enquiryradiobutton = (props) => {
     return (
         <div
         name = "problem"
-        value={props.value}
+        // value={props.value}
         onChange={props.onChange}
         class = "problem">
 
-<label>
+            <label>
                 <input type="radio" name="problem" value="1" id="problem1"/>
                 <img id = 'Radioimg' src={require('../Images/Educationschemes.svg')}/>
                 Education Schemes

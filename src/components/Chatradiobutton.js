@@ -8,7 +8,7 @@ const Chatradiobutton = (props) => {
     return (
         <div 
         name = "chatMode"
-        value= {props.value}
+        // value= {props.value}
         onChange={props.onChange}
         class = 'chatMode'>
 

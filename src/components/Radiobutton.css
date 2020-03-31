@@ -1,3 +1,4 @@
+/* ---------------------------------------------------Radio Buttons------------------------------------------------ */
 /* HIDE RADIO */
 [type=radio] { 
   position: absolute;
@@ -19,18 +20,24 @@
 #Radioimg {
     height: 100px;
     width: 100px;
-    background-color: #ffffff;
+    background-color: #FFFFFF;
 }
 
-.formtitle {
-    color: #000000 !important;
-    text-align: center;
+label {
+  width: 100px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-.chatMode, .problem, .language, .nameInput{
-    display: flex;
-    justify-content: center;
+.chatMode, .problem, .language {
+  display: flex;
+  justify-content: center;
 }
+
+
+
+/* ---------------------------------------------------Navigation----------------------------------------------------- */
 
 .NavButtons, .Logo {
     color: #FFFFFF !important;
@@ -39,7 +46,8 @@
 }
 
 .NavButtons:hover{
-    color: #02452a !important;
+    /* color: #8d8741 !important; */
+    color: #000000 !important;
     font-weight: bolder !important;
 }
 
@@ -55,11 +63,13 @@
 }
 
 .SearchButton:hover {
-    background-color: #02452a !important;
+    /* background-color: #8d8741 !important; */
+    background-color: #000000 !important;
 }
 
 .SearchButton:active {
-    background-color: #02452a !important;
+    background-color: #000000 !important;
+    /* background-color: #8D8741 !important; */
     font-weight: bold;
 }
 
@@ -69,4 +79,146 @@ label {
     text-align: center;
     font-weight: bold;
     text-transform: uppercase;
+}
+
+/* ---------------------------------------------------Pref Form----------------------------------------------------- */
+
+.prefForm {
+  background-color: transparent;
+  height: 800px;
+}
+
+.gridForm {
+  text-align: center;
+  background-color:#FFFFFF !important; 
+  position: relative;
+  top: -150px;
+}
+
+.formTitle {
+  background-color:#000000 !important; 
+  color: #ffffff !important;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.submitButton {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-btn {
+  background: transparent !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.submit-btn:hover, .submit-btn:focus, .submit-btn:active{
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #000000 !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+/* ---------------------------------------------------CPF Board----------------------------------------------------- */
+
+.cpfBoard{
+    text-align: center;
+    background-color: transparent;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    height: 300px;
+  }
+  
+.cpf-btn {
+  background: transparent !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.cpf-btn:hover, .cpf-btn:focus, .cpf-btn:active{
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #000000 !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+
+/* ---------------------------------------------------About Us----------------------------------------------------- */
+
+.aboutUs {
+  /* background-color: #8d8741; */
+  background-color: #000000;
+  color: #FFFFFF;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* ---------------------------------------------------Agents--------------------------------------------------------- */
+
+.agents {
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+  color: #FFFFFF;
+  height: 500px;
+  background-image: url("../Images/Callcentre.jpg");
+  background-attachment:fixed;
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  
+}
+
+.cardButton {
+  color: #000000 !important;
+}
+
+.cardGrid {
+  display: flex;
+  justify-content: center;
+}
+
+.agent-btn {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.agent-btn:hover, .agent-btn:focus, .agent-btn:active{
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border-color: #FFFFFF !important;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+/* ---------------------------------------------------FAQ--------------------------------------------------------- */
+
+.FAQ {
+  /* background-color:  #8d8741 ; */
+  background-color: #000000;
+  color: #FFFFFF;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.FAQtitle {
+  text-align: left;
+  font-weight: bold;
+}
+
+.FAQ h1 {
+  text-align: center !important;
 }

@@ -5,15 +5,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { ThemeProvider } from '@livechat/ui-kit';
 
+
 //------------------------------------------------Components----------------------------------------------------
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, Paper, TextField, Container, Box } from '@material-ui/core';
 import {Button} from "react-bootstrap";
 import Navigation from '../components/Navigation';
-import Chatradiobutton from '../components/Chatradiobutton';
-import Languageradiobutton from '../components/Languageradiobutton';
-import Enquiryradiobutton from '../components/Enquiryradiobutton';
+import PrefForm from '../components/PrefForm';
+import CPFBoard from "../components/CPFBoard";
+import Aboutus from '../components/Aboutus';
+import Agents from '../components/Agents';
+import FAQ from '../components/FAQ';
 import { Launcher } from "react-chat-window";
 import "./App.css";
+
 
 class App extends Component {
   constructor(props) {
@@ -28,8 +32,6 @@ class App extends Component {
       user: "",
       password: "",
       status: "",
-      conversation : null,
-      agentContact : null
     }
     // this.onLoadedHandler = this.onLoadedHandler.bind(this)
   }
@@ -46,10 +48,10 @@ class App extends Component {
 //------------------------------------------------Form event handlers-----------------------------------------------
   submitHandler = () => {
     console.log(this.state);
-    this.onLoadedHandler();
-    this.createGuestAccHandler();
-    this.uploadDatabaseHandler();
-    this.createChatHandler(); //fill in someones ID
+    // this.onLoadedHandler();
+    // this.createGuestAccHandler();
+    // this.uploadDatabaseHandler();
+    // this.createChatHandler(); //fill in someones ID
   }
 
   onFirstNameChangeHandler = (event) => {
@@ -65,7 +67,7 @@ class App extends Component {
   }
 
   onLanguageChangeHandler = (event) => {
-    this.setState({language: parseInt(event.target.value,10)});
+    this.setState({language: event.target.value});
   }
 
   onProblemChangeHandler = (event) => {
@@ -106,6 +108,7 @@ class App extends Component {
 
   createChatHandler = (agentID) => {
     
+    //ID to be retrieved from database
     rainbowSDK.contacts.searchContactById(agentID).then((contact) => {
       console.log(contact, "agent contact");
       this.setState({agentContact : contact});
@@ -123,7 +126,35 @@ class App extends Component {
   }
 
   
-  
+  // connectGuestToAgent = async(agentID) => {
+  //   const user_info = {
+  //     firstName: this.state.firstName,
+  //     lastName: this.state.lastName,
+  //     language: this.state.language
+  //   }
+
+  //   // Create a guest account in the backend
+  //   const guestCredentials = await axios.post("/", user_info);
+  //   console.log("guest account created", guestCredentials);
+  //   const guestUserID = guestCredentials.loginEmail;
+  //   const guestPW = guestCredentials.password;
+
+  //   // Sign in the guest using the retrieved credentials
+  //   const guestAccount = await rainbowSDK.connection.signin(guestUserID,guestPW);
+  //   console.log("guest signed in", guestAccount);
+
+  //   // Retrieve the assigned agent
+  //   const agentContact = await rainbowSDK.contacts.searchContactById(agentID);
+  //   console.log("retrieved agent contact", agentContact);
+
+  //   // Create conversation room between guest and agent
+  //   const convo = await rainbowSDK.conversations.openConversationForContact(agentContact);
+  //   console.log("conversation created", convo);
+
+  //   // Send message to convo
+  //   rainbowSDK.im.sendMessageToConversation(convo,"Lets talk");
+
+  // }
 
 
 
@@ -188,50 +219,33 @@ class App extends Component {
   render() {
     return (
       <div className='main'>
+
+        {/* Navigation bar */}
         <div className='Navbar'>
           <Navigation />
         </div>
 
-        <div className='img'>
+        {/* Background image and title */}
+        <div className='home'>
+          <span className = 'title'>
+            <h1> CPF Help Centre</h1>
+            <h2>Your one stop destination to find  <br>
+            </br>out all about the CPF scheme. <br> 
+            </br>Connect with our friendly agents<br>
+            </br>and they will tend to your queries.</h2>
+          </span>
         </div>
 
-        <div className='prefForm'>
-
-          <div className = "titleSection">
-            <h2 className = "formTitle">Have questions regarding your CPF? Connect with our friendly agents! </h2>                                                                                                                                                                                                                                                                                                                                                                                                                
-          </div>
-
-          <div className = "formSection">  
-            <h3 className = "formTitle">Enter your name </h3>
-            <form noValidate autoComplete="off" class = "nameInput">
-                <TextField  name = "FirstName" onChange = {this.onFirstNameChangeHandler.bind(this)} label="First Name" />
-                <span style={{display: 'inline-block', width: '10px'}} />
-                <TextField  name = "LastName"  onChange = {this.onLastNameChangeHandler.bind(this)} label="Last Name"  />
-            </form>
-          </div>
-
-          <div className = "formSection">
-            <h3 className = "formTitle">Select chat mode</h3>
-            <Chatradiobutton value = {this.state.chatMode} onChange = {this.onChatModeChangeHandler.bind(this)} />
-          </div>
-
-          <div className = "formSection">
-            <h3 className = "formTitle"> Select language </h3>
-            <Languageradiobutton value = {this.state.language} onChange = {this.onLanguageChangeHandler.bind(this)} />
-          </div>
-
-          <div className = "formSection">
-            <h3 className = "formTitle">  Select category of enquiry </h3>
-            <Enquiryradiobutton value = {this.state.problem} onChange = {this.onProblemChangeHandler.bind(this)}/>
-          </div>
-          
-          <div className = "submitButton">
-            <br></br>
-            <Button className="custom-btn" onClick = {this.submitHandler.bind(this)}>
-              Submit
-            </Button>
-          </div>
-
+        {/* Website sections */}
+        <div className='sections'>
+          <PrefForm
+            onFNameChange = {this.onFirstNameChangeHandler.bind(this)}
+            onLNameChange = {this.onLastNameChangeHandler.bind(this)}
+            onChatModeChange = {this.onChatModeChangeHandler.bind(this)}
+            onLanguageChange = {this.onLanguageChangeHandler.bind(this)}
+            onProblemChange = {this.onProblemChangeHandler.bind(this)}
+            onSubmit = {this.submitHandler.bind(this)}
+          />
           <Launcher
               agentProfile={{
                 teamName: `Let's Be Team Players`,
@@ -241,7 +255,12 @@ class App extends Component {
               messageList={this.state.messageList}
               showEmoji
           />
+          <CPFBoard/>
+          <Aboutus/>
+          <Agents/>
+          <FAQ/>
         </div>
+
       </div>
     );
   }
