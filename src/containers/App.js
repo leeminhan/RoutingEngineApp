@@ -7,8 +7,6 @@ import { ThemeProvider } from '@livechat/ui-kit';
 
 
 //------------------------------------------------Components----------------------------------------------------
-import { Grid, Paper, TextField, Container, Box } from '@material-ui/core';
-import {Button} from "react-bootstrap";
 import Navigation from '../components/Navigation';
 import PrefForm from '../components/PrefForm';
 import CPFBoard from "../components/CPFBoard";
