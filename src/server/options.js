@@ -1,17 +1,18 @@
 // Define your configuration
+const config = require('../containers/Config');
 
 let options = {
     rainbow: {
         host: "sandbox"
     },
     credentials: {
-        login: "testacc1@gmail.com", // To replace by your developer credendials
+        login: "minhan.lmh@gmail.com", // To replace by your developer credendials
         password: "Sutd@1234" // To replace by your developer credentials
     },
     // Application identifier
     application: {
-        appID: "be276f0060f911ea9a6dcf004cf8c14e",
-        appSecret: "BQZaEc577I0aTMo34piRvCo55caL1afKRuEtkeGNjqRmbwwRYVIWNCxqZ9GkTgD7"
+        appID: config.applicationID,
+        appSecret: config.applicationSecret
     },
     // Logs options
     logs: {
