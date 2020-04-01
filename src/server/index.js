@@ -50,8 +50,6 @@ router.post('/users', (req,res) => {
             
             db.collection('user').insertOne({
                 info
-                // firstName:"firstName",
-                // lastName: "lastName",
             }).then((result) => {
                 res.status(200).send(info)
             }).catch((error) => {

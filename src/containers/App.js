@@ -28,7 +28,8 @@ class App extends Component {
       top: 0,
       user: "",
       password: "",
-      status: ""
+      status: "",
+      conversation: null,
     }
     initialize();
   }
@@ -37,6 +38,7 @@ class App extends Component {
   submitHandler = () => {
     this.uploadDatabaseHandler()
     this.createGuestAccHandler()
+    // this.openConversationHandler()
   }
 
   onFirstNameChangeHandler = (event) => {
@@ -73,28 +75,56 @@ class App extends Component {
 
       const strLogin = loginCredentials.data.loginEmail
       const strPassword = loginCredentials.data.password
-      console.log(strLogin)
-      console.log(strPassword)
 
       rainbowSDK.connection.signin(strLogin, strPassword).then(account => {
+        this.openConversationHandler()
         console.log('Signed IN!', account)
       }).catch(error => {
         console.log(error)
       })
-      
     }).catch(error => {
       console.log(error)
     })
   }
 
-  signInHandler = () => {
+   openConversationHandler = () => {
+    // const contact = agentid from retrieved rbw CLI
 
-    // rainbowSDK.connection.sigin(strLogin, strPassword).then(account => {
-    //   console.log('Signed IN!', account)
-    // }).catch(error => {
-    //   console.log(error)
-    // })
+    // 1. Search Agent ID -> object
+    // 2. openConversationForContact(object)
+    // 3. IM service: sendMessage to 
+
+    const agentStrId = "5e84513235c8367f99b94cee"
+    rainbowSDK.contacts.searchById(agentStrId).then((agentObject) => {
+      console.log('Client: Found Agent:', agentObject)
+      return agentObject
+    }).then((agentObject) => {
+
+      rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
+        console.log(`Client: Successful openConversation: ${conversation}`)
+        console.log(conversation.id)
+        const strMessage = 'Hi There'
+        // this.sendMessageHandler(conversation, strMessage)
+        rainbowSDK.im.sendMessageToConversation(conversation, strMessage)
+        console.log('send message success')
+      }).catch(error => {
+        console.log('Client: Failed to openConversation')
+      })
+
+    }).catch(error => {
+      console.log('Client: Failed to find Agent id')
+      console.log(error)
+    })
   }
+
+  // sendMessageHandler = (conversation, strMessage) => {
+  //   rainbowSDK.im.sendMessageToConversation(conversation, strMessage).then((result) => {
+  //     console.log("Client: IM:", result)
+  //   }).catch((error) => {
+  //     console.log("IM failed")
+  //   })
+  // }
+  
 
 //------------------------------------------------Launcher event handlers-----------------------------------------------
 
@@ -118,23 +148,6 @@ class App extends Component {
       });
     }
   }
-
-
-  /* When use clicks submit, list of events that need to happen. 
-
-  1. To Create Guest User Account
-  createAccHandler(): Sends a axios.post to a route in backend that creates a Guest Acc
-  That route will also send back guest credentials to frontend for the user to be signed in
-
-  2. IM Service
-
-  /* Connection Services -> User Sign In
-    1. Need a axios.post 
-    2. 
-  */
-
-  /* IM Service - When User sends a message */
-
 
   render() {
     return (
