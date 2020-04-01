@@ -1,0 +1,1 @@
+{"_id":{"$oid":""},"info":{"messageList":[],"firstName":"min","lastName":"","language":{"$numberInt":"2"},"chatMode":{"$numberInt":"1"},"connectionStatus":"","top":{"$numberInt":"4"},"user":"","password":"","status":""}}
