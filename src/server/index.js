@@ -21,10 +21,9 @@ rainbowSDK.events.on('rainbow_onready', function() {
 /* Admin Service - Create Guest Account For User*/
 router.post("/", (req,res) => {
     try{
-        //Consider changing to async await once done with other routes
-
         rainbowSDK.admin.createAnonymousGuestUser().then((loginCredentials) => {
             console.log("Guest User Account successfully created")
+            console.log(loginCredentials)
             res.status(200).send(loginCredentials)
         }).catch((error)=>{
             console.log(`Failed to Create Guest Account; Error: ${error}`)

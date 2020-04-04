@@ -26,21 +26,16 @@ class App extends Component {
       language: "en-us", //change the lanuageradiobutton setting of 0/1/2/3
       chatMode: 0,
       top: 0,
-      user: "",
-      password: "",
+      loginEmail: "",
+      loginPassword: "",
       status: "",
-      conversation: null,
+      agentObject: null,
+      conversationObject: null
     }
     initialize();
   }
 
 //------------------------------------------------Form event handlers-----------------------------------------------
-  submitHandler = () => {
-    this.uploadDatabaseHandler()
-    this.createGuestAccHandler()
-    // this.openConversationHandler()
-  }
-
   onFirstNameChangeHandler = (event) => {
     this.setState({firstName: event.target.value});
   }
@@ -61,68 +56,126 @@ class App extends Component {
     this.setState({top: parseInt(event.target.value,10)});
   }
   
-  uploadDatabaseHandler = () =>{
-    axios.post("http://localhost:8000/users", this.state).then(() => {
+  uploadDatabaseHandler = async() =>{
+    await axios.post("http://localhost:8000/users", this.state).then(() => {
       console.log("Client: Uploaded user information to Database")
     }).catch(error => {
       console.log(error)
     })
   }
-  
-  createGuestAccHandler = () => {
-    axios.post("http://localhost:8000/").then((loginCredentials) => {
+
+  submitHandler = async() => {
+    
+    try{
+      this.uploadDatabaseHandler()
+      const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
+      // var loginCredentials = this.createGuestAccHandler()
+      console.log(loginCredentials)
+      // console.log(this.state.loginEmail)
+      // await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
+    }catch(error){
+      console.log(error)
+    }
+    
+    // await this.openConversationHandler()
+    // await this.sendMessageHandler()
+  }
+
+  /* Create Guest Account and SignIn to Guest Account at the same time -------------------------*/
+  createGuestAccHandler = async() => {
+    //This return means: return a promise that's either resolved/rejected
+    return await axios.post("http://localhost:8000/").then((loginCredentials) => {
       console.log('Client: Guest User Account created')
-
-      const strLogin = loginCredentials.data.loginEmail
-      const strPassword = loginCredentials.data.password
-
-      rainbowSDK.connection.signin(strLogin, strPassword).then(account => {
-        this.openConversationHandler()
-        console.log('Signed IN!', account)
-      }).catch(error => {
-        console.log(error)
+      this.setState({
+        loginEmail: loginCredentials.data.loginEmail,
+        loginPassword: loginCredentials.data.password
       })
+      console.log(loginCredentials)
+      return loginCredentials
+      // return (loginCredentials) GET BACK TO THIS ---- do something to wait for this to be done before login() occurs
+      // this.signInHandler()
     }).catch(error => {
       console.log(error)
     })
   }
 
-   openConversationHandler = () => {
-    // const contact = agentid from retrieved rbw CLI
+  signInHandler = (loginEmail, loginPassword) => {
+    rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
+      // this.openConversationHandler()
+      console.log('Client: Signed IN!', account)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
 
-    // 1. Search Agent ID -> object
-    // 2. openConversationForContact(object)
-    // 3. IM service: sendMessage to 
+  // const contact = agentid from retrieved rbw CLI
 
-    const agentStrId = "5e84513235c8367f99b94cee"
-    rainbowSDK.contacts.searchById(agentStrId).then((agentObject) => {
-      console.log('Client: Found Agent:', agentObject)
+  // 1. Search Agent ID -> object
+  // 2. openConversationForContact(object)
+  // 3. IM service: sendMessage to 
+
+  //Takes in agentId and returns agentObject
+  searchByIdHandler = async(agentid) => {
+    try {
+      const agentObject = await rainbowSDK.contacts.searchById(agentid)
+      console.log("Client: Found Agent")
       return agentObject
-    }).then((agentObject) => {
-
-      rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-        console.log(`Client: Successful openConversation: ${conversation}`)
-        console.log(conversation.id)
-        const strMessage = 'Hi There'
-        // this.sendMessageHandler(conversation, strMessage)
-        rainbowSDK.im.sendMessageToConversation(conversation, strMessage)
-        console.log('send message success')
-      }).catch(error => {
-        console.log('Client: Failed to openConversation')
-      })
-
-    }).catch(error => {
-      console.log('Client: Failed to find Agent id')
-      console.log(error)
-    })
+    }catch(error){
+      console.log("Client: Failed to find agent")
+      return error
+    }
   }
 
-  // sendMessageHandler = (conversation, strMessage) => {
-  //   rainbowSDK.im.sendMessageToConversation(conversation, strMessage).then((result) => {
-  //     console.log("Client: IM:", result)
-  //   }).catch((error) => {
-  //     console.log("IM failed")
+  // openConversationHandler = async() => {
+
+  //   const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
+  //   const agentObject = await this.searchByIdHandler(agentStrId)
+
+  //   rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
+  //     console.log(`Client: Successful openConversation: ${conversation}`)
+  //     const strMessage = 'Hi There'
+  //     // this.sendMessageHandler(conversation, strMessage)
+  //     this.setState({conversationObject: conversation})
+  //     rainbowSDK.im.sendMessageToConversation(conversation, strMessage)
+  //     console.log('Client: Send message success')
+  //   }).catch(error => {
+  //     console.log('Client: Failed to openConversation')
   //   })
+  // }
+
+  openConversationHandler = async() => {
+
+    const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
+    const agentObject = await this.searchByIdHandler(agentStrId)
+
+    rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
+      console.log(`Client: Successful openConversation: ${conversation}`)
+      this.setState({conversationObject: conversation})
+      this.sendMessageHandler(conversation)
+      return conversation
+    }).catch(error => {
+      console.log('Client: Failed to openConversation')
+    })
+  }
+  // Expects conversationObject and strMessage
+  sendMessageHandler = async(conversationObject) => {
+    // const conversationObject = await this.openConversationHandler()
+    const strMessage = 'Hi There'
+    console.log(strMessage)
+    try{
+      rainbowSDK.im.sendMessageToConversation(conversationObject, strMessage)
+      console.log('Client: Send message success')
+    }catch(error){
+      console.log('Client: Failed to send message')
+      console.log(error)
+    }
+    
+    // console.log("Client:", result)
+   
+  }
+  
+  // getMessageHandler = () => {
+
   // }
   
 
@@ -146,6 +199,7 @@ class App extends Component {
           }
         ]
       });
+      this.sendMessageHandler(this.state.conversationObject, 'HELLLLLO');
     }
   }
 
@@ -212,3 +266,27 @@ class App extends Component {
 }
 
 export default App;
+
+
+  //  openConversationHandler = () => {
+
+  //   const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
+
+  //   this.searchByIdHandler(agentStrId).then((agentObject) => {
+  //     //openConversation with that agent based on agentObject which can be retrieved from finding the agent
+  //     rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
+  //       console.log(`Client: Successful openConversation: ${conversation}`)
+  //       const strMessage = 'Hi There'
+  //       // this.sendMessageHandler(conversation, strMessage)
+  //       this.setState({conversationObject: conversation})
+  //       rainbowSDK.im.sendMessageToConversation(conversation, strMessage)
+  //       console.log('send message success')
+  //     }).catch(error => {
+  //       console.log('Client: Failed to openConversation')
+  //     })
+
+  //   }).catch(error => {
+  //     console.log('Client: Failed to find Agent id')
+  //     console.log(error)
+  //   })
+  // }
