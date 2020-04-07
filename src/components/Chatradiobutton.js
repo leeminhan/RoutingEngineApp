@@ -3,14 +3,14 @@ import "./Radiobutton.css";
 
 
 const Chatradiobutton = (props) => {
-    const mySpan = <span style={{display: 'inline-block', width: '30px'}} />
+    const mySpan = <span style={{display: 'inline-block', width: '80px'}} />
     
     return (
         <div 
         name = "chatMode"
         // value= {props.value}
         onChange={props.onChange}
-        class = 'chatMode'>
+        className = 'chatMode'>
 
             <label>
                 <input type="radio" name="chatmode" value= "1"  />
@@ -23,12 +23,12 @@ const Chatradiobutton = (props) => {
                 <img id = 'Radioimg' src={require('../Images/Videocall.svg')} />
                 Video Calling
             </label>
-            {mySpan}
+            {/* {mySpan}
             <label>
                 <input type="radio" name="chatmode" value="3" />
-                <img id = 'Radioimg' src={require('../Images/Phonecall.svg')} />
+                <img id = 'Radioimg' src={require('../Images/Phonecall.png')} />
                 Voice Calling
-            </label>
+            </label> */}
         </div>
     );
 }

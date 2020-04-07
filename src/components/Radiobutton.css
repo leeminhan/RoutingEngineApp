@@ -14,20 +14,22 @@
 
 /* CHECKED STYLES */
 [type=radio]:checked + img {
-  outline: 3px solid #000000;
+  outline: 4px solid #5cdb95 ;
+  
 }
 
 #Radioimg {
-    height: 100px;
-    width: 100px;
-    background-color: #FFFFFF;
+    height: 120px;
+    width: 120px;
+    background-color: transparent;
 }
 
 label {
-  width: 100px;
+  width: 120px;
   text-align: center;
   font-weight: bold;
   text-transform: uppercase;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 .chatMode, .problem, .language {
@@ -39,66 +41,144 @@ label {
 
 /* ---------------------------------------------------Navigation----------------------------------------------------- */
 
-.NavButtons, .Logo {
-    color: #FFFFFF !important;
-    font-weight: bold !important;
+.navbarlogo{
+  position: relative;
+  left: 30px;
+  top: 15px;
+}
+
+
+.Navbar li {
+  display: inline;
+  float: right;
+  width: 150px;
+  height: 80px;
   
 }
 
-.NavButtons:hover{
-    /* color: #8d8741 !important; */
-    color: #000000 !important;
-    font-weight: bolder !important;
+
+.Navbar ul {
+  background-color: #ffffff;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  
 }
 
-.NavBar {
-      width: 100%;
-      background-color: transparent !important;
+.Navbar li a {
+  display: block;
+  color: #000000;
+  /* text-align: end; */
+  line-height: 100px;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-family: 'Avenir', 'Arial', sans-serif;
+  font-size: large;
+  font-weight: 900;
 }
 
-.SearchButton {
-    color: #FFFFFF !important;
-    border-color: #FFFFFF !important;
-    padding: 5px 10px !important;
-}
-
-.SearchButton:hover {
-    /* background-color: #8d8741 !important; */
-    background-color: #000000 !important;
-}
-
-.SearchButton:active {
-    background-color: #000000 !important;
-    /* background-color: #8D8741 !important; */
-    font-weight: bold;
+.Navbar li a:hover, .Navbar li a:active {
+  color: #5cdb95;
+  font-weight: 900;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif;
 }
 
 
-label {
-    width: 100px;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-}
+
 
 /* ---------------------------------------------------Pref Form----------------------------------------------------- */
 
 .prefForm {
   background-color: transparent;
-  height: 800px;
-}
-
-.gridForm {
+  /* height: 2200px; */
   text-align: center;
-  background-color:#FFFFFF !important; 
-  position: relative;
-  top: -150px;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif;
+  color: #5cdb95;
 }
 
-.formTitle {
-  background-color:#000000 !important; 
-  color: #ffffff !important;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+.formTitle h1 {
+  text-align: center;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
+  color: #5cdb95 !important;
+  font-weight: 900 !important;
+  font-size: 48px ;
+}
+
+.leftTitle {
+  text-align: right !important;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
+  color: #5cdb95 !important;
+  font-weight: 900 !important;
+  font-size: 48px ;
+}
+
+.rightTitle {
+  text-align: left !important;
+  font-family: 'Avenir', 'Arial Black', sans-serif !important;
+  color: #5cdb95!important;
+  font-weight: 900 !important;
+  font-size: 48px ;
+}
+
+
+.FirstName, .LastName {
+  background-color: #5cdb9533;
+}
+
+.dividerHor {
+  border: 2px solid #5cdb95;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 150px;
+}
+
+.dividerVer {
+  background: #5cdb95;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 30px;
+  width: 3px;
+}
+
+.dividerBotName {
+  background: #5cdb95;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 30px;
+  width: 3px;
+  position: relative;
+  top: 158px;
+}
+
+.dividerBotTitle {
+  background: #5cdb95;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 30px;
+  width: 3px;
+  position: relative;
+  top: 55px;
+}
+
+.dividerBotChat {
+  background: #5cdb95;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 30px;
+  width: 3px;
+  position: relative;
+  top: 50px;
+}
+
+.dividerBotLang {
+  background: #5cdb95;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 30px;
+  width: 3px;
+  position: relative;
+  top: 74px;
 }
 
 .submitButton {
@@ -106,51 +186,82 @@ label {
   justify-content: center;
 }
 
-.submit-btn {
-  background: transparent !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
+.submit-btn, .back-btn, .next-btn {
+  background: #5cdb95 !important;
+  color: #ffffff !important;
+  border-color: #5cdb95 !important;
+  border-width: 3px !important;
   padding: 5px 10px;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 400;
+  font-family: 'Avenir', 'Arial', sans-serif !important;
 }
 
-.submit-btn:hover, .submit-btn:focus, .submit-btn:active{
-  background: #000000 !important;
-  color: #FFFFFF !important;
-  border-color: #000000 !important;
+.submit-btn:hover, .submit-btn:focus, .submit-btn:active, .back-btn:hover, .back-btn:focus, .back-btn:active, .next-btn:hover, .next-btn:focus, .next-btn:active {
+  background: #5cdb95 !important;
+  color: #ffffff !important;
+  border-color: #5cdb95 !important;
+  border-width: 3px !important;
   padding: 5px 10px;
   text-transform: uppercase;
-  font-weight: bolder;
+  font-weight: 900;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
 }
+
+.chatInput , .problemInput, .nameInput, .languageInput, .formTitle , .submit {
+  height: 738px;
+}
+
+.submit {
+  height: 369px;
+}
+
+
+.chatInput, .problemInput, .formTitle{
+  background:  linear-gradient(to right, #eff1f2 50%, #edf5e1 50%);
+}
+
+/* .chatInput, .problemInput, .formTitle{
+  background:  linear-gradient(to right, #edf5e1 50%, #eff1f2 50%);
+} */
+
 
 /* ---------------------------------------------------CPF Board----------------------------------------------------- */
 
 .cpfBoard{
     text-align: center;
     background-color: transparent;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    height: 300px;
+    font-family: 'Roboto', sans-serif;;
+    height: 369px;
   }
   
+.cpfBoard h5, .cpfBoard h3 {
+  color: #5cdb95;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
+
+}
+
 .cpf-btn {
-  background: transparent !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
+  background: #5cdb95 !important;
+  color: #ffffff !important;
+  border-color: #5cdb95 !important;
+  border-width: 3px !important;
   padding: 5px 10px;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 400;
+  font-family: 'Avenir', 'Arial', sans-serif !important;
 }
 
 .cpf-btn:hover, .cpf-btn:focus, .cpf-btn:active{
-  background: #000000 !important;
-  color: #FFFFFF !important;
-  border-color: #000000 !important;
+  background: #5cdb95 !important;
+  color: #ffffff !important;
+  border-color: #5cdb95 !important;
+  border-width: 3px !important;
   padding: 5px 10px;
   text-transform: uppercase;
-  font-weight: bolder;
+  font-weight: 900;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
 }
-
 
 /* ---------------------------------------------------About Us----------------------------------------------------- */
 
@@ -159,14 +270,14 @@ label {
   background-color: #000000;
   color: #FFFFFF;
   text-align: center;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Roboto', sans-serif;;
 }
 
 /* ---------------------------------------------------Agents--------------------------------------------------------- */
 
 .agents {
   text-align: center;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Roboto', sans-serif;;
   font-weight: bold;
   color: #FFFFFF;
   height: 500px;
@@ -211,7 +322,7 @@ label {
   /* background-color:  #8d8741 ; */
   background-color: #000000;
   color: #FFFFFF;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Roboto', sans-serif;;
 }
 
 .FAQtitle {

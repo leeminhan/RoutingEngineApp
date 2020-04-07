@@ -6,8 +6,8 @@ import axios from "axios";
 import { ThemeProvider } from '@livechat/ui-kit';
 
 
-//------------------------------------------------Components----------------------------------------------------
-import Navigation from '../components/Navigation';
+//------------------------------------------------Components----------------------------------------------------git
+import Navbar from '../components/Navbar';
 import PrefForm from '../components/PrefForm';
 import CPFBoard from "../components/CPFBoard";
 import Aboutus from '../components/Aboutus';
@@ -114,48 +114,8 @@ class App extends Component {
       console.log(error, "failed to get agent contact");
     })
 
-    rainbowSDK.conversations.openConversationForContact(this.state.agentContact).then((convo) => {
-      console.log(convo, "conversation created");
-      this.setState({conversation: convo});
-      rainbowSDK.im.sendMessageToConversation(convo, "Thank you for calling. How may I help you?");
-    }).catch(error => {
-      console.log(error, "failed to start conversation");
-    })
-  }
-
   
-  // connectGuestToAgent = async(agentID) => {
-  //   const user_info = {
-  //     firstName: this.state.firstName,
-  //     lastName: this.state.lastName,
-  //     language: this.state.language
-  //   }
-
-  //   // Create a guest account in the backend
-  //   const guestCredentials = await axios.post("/", user_info);
-  //   console.log("guest account created", guestCredentials);
-  //   const guestUserID = guestCredentials.loginEmail;
-  //   const guestPW = guestCredentials.password;
-
-  //   // Sign in the guest using the retrieved credentials
-  //   const guestAccount = await rainbowSDK.connection.signin(guestUserID,guestPW);
-  //   console.log("guest signed in", guestAccount);
-
-  //   // Retrieve the assigned agent
-  //   const agentContact = await rainbowSDK.contacts.searchContactById(agentID);
-  //   console.log("retrieved agent contact", agentContact);
-
-  //   // Create conversation room between guest and agent
-  //   const convo = await rainbowSDK.conversations.openConversationForContact(agentContact);
-  //   console.log("conversation created", convo);
-
-  //   // Send message to convo
-  //   rainbowSDK.im.sendMessageToConversation(convo,"Lets talk");
-
-  // }
-
-
-
+  }
 
 //------------------------------------------------Launcher event handlers-----------------------------------------------
 
@@ -172,70 +132,35 @@ class App extends Component {
         messageList: [
           ...this.state.messageList,
           {
-            author: "them",
+            author: this.state.firstName + this.state.lastName,
             type: "text",
             data: { text }
           }
         ]
       });
-
-      if (this.state.conversation != null) {
-        rainbowSDK.Im.sendMessageToConversation(this.state.conversation, text);
-      }
-
     }
   }
-
-
-
-
-  /* Connection Services -> User Sign In
-    1. Need a axios.post 
-    2. 
-  */
-
-  /* When use clicks submit, list of events that need to happen. 
-
-  1. To Create Guest User Account
-  createAccHandler(): Sends a axios.post to a route in backend that creates a Guest Acc
-  That route will also send back guest credentials to frontend for the user to be signed in
-
-  2. IM Service
-  
-  3. User information will be uploaded to database
-    - To Create a axios.post to a specific route 
-  */
-
-  /* Connection Services -> User Sign In
-    1. Need a axios.post 
-    2. 
-  */
-
-  /* IM Service - When User sends a message */
-
 
   render() {
     return (
       <div className='main'>
 
-        {/* Navigation bar */}
-        <div className='Navbar'>
-          <Navigation />
-        </div>
+        {/* Background Video  */}
+        <video className = "background-video" autoPlay muted loop>
+          <source src={require('../Images/Background.mp4')} type="video/mp4" />
+                Your browser does not support the video tag.
+        </video>
 
-        {/* Background image and title */}
-        <div className='home'>
-          <span className = 'title'>
-            <h1> CPF Help Centre</h1>
-            <h2>Your one stop destination to find  <br>
-            </br>out all about the CPF scheme. <br> 
-            </br>Connect with our friendly agents<br>
-            </br>and they will tend to your queries.</h2>
-          </span>
-        </div>
+        
+
+        {/* Background image and title set in css */}
+          <div className='home'> 
+
+          </div>
 
         {/* Website sections */}
         <div className='sections'>
+          <CPFBoard/>
           <PrefForm
             onFNameChange = {this.onFirstNameChangeHandler.bind(this)}
             onLNameChange = {this.onLastNameChangeHandler.bind(this)}
@@ -244,7 +169,18 @@ class App extends Component {
             onProblemChange = {this.onProblemChangeHandler.bind(this)}
             onSubmit = {this.submitHandler.bind(this)}
           />
-          <Launcher
+          
+          {/* <Aboutus/>
+          <Agents/>
+          <FAQ/> */}
+        </div>
+
+        {/* Navigation bar */}
+        <div className = 'NavBar'>
+          <Navbar/>
+        </div>
+
+        <Launcher
               agentProfile={{
                 teamName: `Let's Be Team Players`,
                 imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
@@ -253,11 +189,6 @@ class App extends Component {
               messageList={this.state.messageList}
               showEmoji
           />
-          <CPFBoard/>
-          <Aboutus/>
-          <Agents/>
-          <FAQ/>
-        </div>
 
       </div>
     );

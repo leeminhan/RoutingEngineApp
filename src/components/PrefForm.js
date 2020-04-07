@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Paper, TextField, Container } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import {Button} from "react-bootstrap";
 import Chatradiobutton from './Chatradiobutton';
 import Languageradiobutton from './Languageradiobutton';
@@ -9,56 +9,100 @@ import "./Radiobutton.css";
 const PrefForm = (props) => {
     return (
         <div className='prefForm'>
-          <Container maxWidth = 'lg' > 
-          <Paper className = 'gridForm' elevation={3}> 
-          <Grid container spacing={0} > 
-              <Grid item xs={12} >
-                <Paper className = 'formTitle' elevation={3}>
-                  <h1 >Connect with our friendly agents! </h1>   
-                </Paper>                                                                                                                                                                                                                                                                                                                                                                                            
-              </Grid>
+          <div className = 'formTitle' >
+            <hr className = 'dividerHor' />
+            <hr className = 'dividerVer'/>
+            <br></br>  <br></br>
+            <h1>CONNECT WITH OUR AGENTS</h1>   
+            <br></br> <br></br> <br></br> <br></br>
+            <img className = 'agentIcom'
+              src={require('../Images/Agenticon.svg')}
+              width="150"
+              height="150"
+            />
+            <br></br> <br></br> <br></br> <br></br>
+            <h5> If you have any CPF related enquiries, fill up the form below <br> 
+            </br>and we will connect you to one of our agents who will assist you</h5>
+          </div>                                                                                                                                                                                                                                                                                                                                                                                          
 
-              <Grid item xs={12} >
-                <br></br>
-                <h3 >Enter your name </h3>
-                <form noValidate autoComplete="off" class = "nameInput">
-                    <TextField  name = "FirstName" onChange = {props.onFNameChange} label="First Name" />
-                    <span style={{display: 'inline-block', width: '10px'}} />
-                    <TextField  name = "LastName"  onChange = {props.onLNameChange} label="Last Name"  />
-                </form>
+          <div className = 'nameInput'>
+            <hr className = 'dividerHor' />
+            <hr className = 'dividerVer'/>
+            <br></br> <br></br>
+            <Grid container spacing = {1}>
+              <Grid className = 'leftTitle' item xs = {6}>
+                <h1>ENTER</h1>   
               </Grid>
+              <Grid className = 'rightTitle' item xs = {6}>
+                <h1>NAME</h1>   
+              </Grid>
+            </Grid>
+            <br></br> <br></br> <br></br><br></br> <br></br> <br></br> 
+            <form noValidate autoComplete="off" >
+                <TextField size = 'medium' className = "FirstName" onChange = {props.onFNameChange} label="First Name"  variant = 'filled'/>
+                <span style={{display: 'inline-block', width: '30px'}} />
+                <TextField size = 'medium' className = "LastName"  onChange = {props.onLNameChange} label="Last Name"  variant = 'filled'  />
+            </form>
+          </div>
 
-              <Grid item xs={12} >
-                <br></br>
-                <h3 >Select chat mode</h3>
-                <Chatradiobutton onChange = {props.onChatModeChange} />
+          <div className = 'chatInput'>
+            <hr className = 'dividerHor' />
+            <hr className = 'dividerVer'/>
+            <br></br> <br></br>
+            <Grid container spacing = {1}>
+              <Grid className = 'leftTitle' item xs = {6}>
+                <h1>SELECT</h1>   
               </Grid>
+              <Grid className = 'rightTitle' item xs = {6}>
+                <h1>CHAT MODE</h1>   
+              </Grid>
+            </Grid>
+            <br></br> <br></br> <br></br> <br></br>
+            <Chatradiobutton onChange = {props.onChatModeChange} />
+          </div>
 
-              <Grid item xs={12} >
-                <br></br>
-                <h3 > Select language </h3>
-                <Languageradiobutton onChange = {props.onLanguageChange} />
+          <div className = 'languageInput'>
+            <hr className = 'dividerHor' />
+            <hr className = 'dividerVer'/>
+            <br></br> <br></br>
+            <Grid container spacing = {1}>
+              <Grid className = 'leftTitle' item xs = {6}>
+                <h1>SELECT</h1>   
               </Grid>
+              <Grid className = 'rightTitle' item xs = {6}>
+                <h1>LANGUAGE</h1>   
+              </Grid>
+            </Grid>
+            <br></br> <br></br><br></br> <br></br><br></br> <br></br>
+            <Languageradiobutton onChange = {props.onLanguageChange} />
+          </div>
 
-              <Grid item xs={12} >
-                <br></br>
-                <h3 >  Select category of enquiry </h3>
-                <Enquiryradiobutton onChange = {props.onProblemChange}/>
+          <div className = 'problemInput'>
+            <hr className = 'dividerHor' />
+            <hr className = 'dividerVer'/>
+            <br></br> <br></br>
+            <Grid container spacing = {1}>
+              <Grid className = 'leftTitle' item xs = {6}>
+                <h1>SELECT</h1>   
               </Grid>
+              <Grid className = 'rightTitle' item xs = {6}>
+                <h1>ENQUIRY</h1>   
+              </Grid>
+            </Grid>
+            <br></br> <br></br><br></br> <br></br><br></br> <br></br>
+            <Enquiryradiobutton onChange = {props.onProblemChange}/>
+          </div>
                 
-              <Grid item xs={12} >
-                <br></br>
-                <Button className="submit-btn" onClick = {props.onSubmit}>
-                  Submit
-                </Button>
-                <br></br>
-                <span style={{display: 'inline-block', width: '10px'}} />
-              </Grid>
-
-              
-          </Grid>
-          </Paper>
-          </Container>
+          <div className = 'submit'>
+            <hr className = 'dividerHor' />
+            <hr className = 'dividerVer'/>
+            <br></br> <br></br>
+            <Button className="submit-btn" size ='lg' onClick = {props.onSubmit}>
+              Submit
+            </Button>
+            <br></br> <br></br>
+            <h5> Please give us some time while we connect you to a suitable agent.</h5>
+          </div>
         </div>
     );
 }

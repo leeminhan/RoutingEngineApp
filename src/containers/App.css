@@ -1,36 +1,43 @@
 .home {
-  background-image: url("../Images/Background.png");
-  min-height: 830px;
+  background-image: url("../Images/Background2.gif");
+  min-height: 738px;
   min-width: 100%;
-  background-attachment:fixed;
+  text-align: center;
   background-size: cover;
   background-repeat:no-repeat;
   background-position:center;
   position: relative;
-  top: -70px; 
-  background-color: #FFF0F5;
-  /* background-color: #7e91a6; */
+  top: 80px;
+  opacity: 0.75;
 }
 
-.title {
-  
+
+.background-video {
+  height: 900px;
+  position: fixed;
+}
+
+.home span {
+  font-size: 144px;
   color: #FFFFFF;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Avenir Black', 'Arial Black', sans-serif;
   position: relative;
-  top: 170px;
-  left: 70px;
+  top: 240px;
 }
 
-.title h1 {
-  font-size: 64px;
+.NavBar{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  opacity: 1;
 }
 
 .sections {
-  background-color: #FFF0F5;
-  /* background-color: #7e91a6; */
+  /* background-color: #FFF0F5; */
+  background-color: #FFFFFF;
   position: relative;
-  top: -100px;
-  /* height: 700px; */
+  top: 80px;
+  
 }
 
 
