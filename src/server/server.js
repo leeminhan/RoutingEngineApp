@@ -8,32 +8,11 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 
 const app = express();
-<<<<<<< HEAD
-const mongoose = require('mongoose');
-
-const rainbow = new RainbowSDK(options);
-
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('connected to database'))
-
-app.listen(8000, function() {
-    console.log('App running on port 8000');
-});
-
-require('dotenv').config()
-
-
-
-
-=======
 app.use(cors());
 
 // Instantiate 
 // const rainbow = new RainbowSDK(options);
 const timeTolive = 3600;
->>>>>>> ae06387d9b59842b48da178bfec7b4bf93c40312
 
 
 // Create agent accounts on rbw CLI first 
