@@ -69,9 +69,60 @@ class App extends Component {
     this.setState({top: parseInt(event.target.value,10)});
   }
   
+<<<<<<< Updated upstream
   uploadDatabaseHandler = () =>{
     axios.post("http://localhost:8000/users", this.state).then(() => {
       console.log("Uploaded user information to Database")
+=======
+  uploadDatabaseHandler = async() =>{
+    await axios.post("http://localhost:8000/users", this.state).then(() => {
+      console.log("Client: Uploaded user information to Database")
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  submitHandler = async() => {
+    
+    try{
+      console.log(this.state)
+      this.uploadDatabaseHandler()
+      const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
+      // var loginCredentials = this.createGuestAccHandler()
+      console.log(loginCredentials)
+      // console.log(this.state.loginEmail)
+      // await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
+    }catch(error){
+      console.log(error)
+    }
+    
+    // await this.openConversationHandler()
+    // await this.sendMessageHandler()
+  }
+
+  /* Create Guest Account and SignIn to Guest Account at the same time -------------------------*/
+  createGuestAccHandler = async() => {
+    //This return means: return a promise that's either resolved/rejected
+    return await axios.post("http://localhost:8000/").then((loginCredentials) => {
+      console.log('Client: Guest User Account created')
+      this.setState({
+        loginEmail: loginCredentials.data.loginEmail,
+        loginPassword: loginCredentials.data.password
+      })
+      console.log(loginCredentials)
+      return loginCredentials
+      // return (loginCredentials) GET BACK TO THIS ---- do something to wait for this to be done before login() occurs
+      // this.signInHandler()
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  signInHandler = (loginEmail, loginPassword) => {
+    rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
+      // this.openConversationHandler()
+      console.log('Client: Signed IN!', account)
+>>>>>>> Stashed changes
     }).catch(error => {
       console.log(error)
     })
