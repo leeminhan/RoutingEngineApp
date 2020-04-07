@@ -11,3 +11,6 @@ A routing engine that routes incoming chat and audio call requests to the right 
 ```
 ```
 Running on localhost:3000
+
+## API Calls
+openConversati

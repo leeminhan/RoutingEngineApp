@@ -23,7 +23,7 @@ router.post("/", (req,res) => {
     try{
         rainbowSDK.admin.createAnonymousGuestUser().then((loginCredentials) => {
             console.log("Guest User Account successfully created")
-            console.log(loginCredentials)
+            console.log("Login Credentials:\n" , loginCredentials)
             res.status(200).send(loginCredentials)
         }).catch((error)=>{
             console.log(`Failed to Create Guest Account; Error: ${error}`)

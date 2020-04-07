@@ -65,23 +65,17 @@ class App extends Component {
   }
 
   submitHandler = async() => {
-    
     try{
       this.uploadDatabaseHandler()
       const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
-      // var loginCredentials = this.createGuestAccHandler()
-      console.log(loginCredentials)
-      // console.log(this.state.loginEmail)
-      // await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
+      await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
+      // await this.searchByIdHandler(agentStrId)
+      await this.openConversationHandler()
     }catch(error){
       console.log(error)
     }
-    
-    // await this.openConversationHandler()
-    // await this.sendMessageHandler()
   }
 
-  /* Create Guest Account and SignIn to Guest Account at the same time -------------------------*/
   createGuestAccHandler = async() => {
     //This return means: return a promise that's either resolved/rejected
     return await axios.post("http://localhost:8000/").then((loginCredentials) => {
@@ -98,9 +92,9 @@ class App extends Component {
       console.log(error)
     })
   }
-
   signInHandler = (loginEmail, loginPassword) => {
-    rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
+    // Remember to return promise since we are awaiting the promise to be fulfilled before progressing in above submitHandler
+    return rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
       // this.openConversationHandler()
       console.log('Client: Signed IN!', account)
     }).catch(error => {
@@ -126,65 +120,74 @@ class App extends Component {
     }
   }
 
-  // openConversationHandler = async() => {
+  openConversationHandler = async(message) => {
 
-  //   const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
-  //   const agentObject = await this.searchByIdHandler(agentStrId)
-
-  //   rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-  //     console.log(`Client: Successful openConversation: ${conversation}`)
-  //     const strMessage = 'Hi There'
-  //     // this.sendMessageHandler(conversation, strMessage)
-  //     this.setState({conversationObject: conversation})
-  //     rainbowSDK.im.sendMessageToConversation(conversation, strMessage)
-  //     console.log('Client: Send message success')
-  //   }).catch(error => {
-  //     console.log('Client: Failed to openConversation')
-  //   })
-  // }
-
-  openConversationHandler = async() => {
+    //In future, this agentStrID can be hardcoded in the state or best retrieved from the Database
+    // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
+    //Refactor searchByIdHandler out of this handler
 
     const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
     const agentObject = await this.searchByIdHandler(agentStrId)
+    console.log("Agent Object:\n", agentObject)
 
-    rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-      console.log(`Client: Successful openConversation: ${conversation}`)
+    return rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
+      console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
       this.setState({conversationObject: conversation})
-      this.sendMessageHandler(conversation)
+      // this.sendMessageHandler(message)
       return conversation
     }).catch(error => {
       console.log('Client: Failed to openConversation')
     })
   }
+
   // Expects conversationObject and strMessage
-  sendMessageHandler = async(conversationObject) => {
-    // const conversationObject = await this.openConversationHandler()
-    const strMessage = 'Hi There'
-    console.log(strMessage)
+  sendMessageHandler = (message) => {
     try{
-      rainbowSDK.im.sendMessageToConversation(conversationObject, strMessage)
+      // console.log(this.state.conversationObject)
+      // console.log(message)
+      rainbowSDK.im.sendMessageToConversation(this.state.conversationObject, message) //should use this.state.conversationObject
       console.log('Client: Send message success')
     }catch(error){
       console.log('Client: Failed to send message')
       console.log(error)
     }
-    
-    // console.log("Client:", result)
-   
+  }
+
+  onNewMessageReceived = (event) =>  {
+    let message = event.detail.message;
+    let conversation = event.detail.conversation
+
+    console.log(message)
+    console.log(message.data)
+    const incomingMessage = message.data
+
+    this.setState({
+      messageList: [
+        ...this.state.messageList,
+        {
+          author: "them",
+          type: "text",
+          data: {text: incomingMessage }
+        }
+      ]
+    })
+  }
+
+  componentDidMount = () => {
+    document.addEventListener(rainbowSDK.im.RAINBOW_ONNEWIMMESSAGERECEIVED, this.onNewMessageReceived);
   }
   
-  // getMessageHandler = () => {
-
-  // }
-  
-
 //------------------------------------------------Launcher event handlers-----------------------------------------------
 
-  _onMessageWasSent(message) {
+  _onMessageWasSent = (message) => { //message is the input to the launcher
     this.setState({
       messageList: [...this.state.messageList, message]
     })
+    console.log(message)
+    console.log(message.data)
+    console.log(this.state.messageList)
+    // this.openConversationHandler(message.data.text)
+    this.sendMessageHandler(message.data.text)
   }
 
   _sendMessage(text) {
@@ -198,8 +201,7 @@ class App extends Component {
             data: { text }
           }
         ]
-      });
-      this.sendMessageHandler(this.state.conversationObject, 'HELLLLLO');
+      })
     }
   }
 
@@ -266,27 +268,3 @@ class App extends Component {
 }
 
 export default App;
-
-
-  //  openConversationHandler = () => {
-
-  //   const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
-
-  //   this.searchByIdHandler(agentStrId).then((agentObject) => {
-  //     //openConversation with that agent based on agentObject which can be retrieved from finding the agent
-  //     rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-  //       console.log(`Client: Successful openConversation: ${conversation}`)
-  //       const strMessage = 'Hi There'
-  //       // this.sendMessageHandler(conversation, strMessage)
-  //       this.setState({conversationObject: conversation})
-  //       rainbowSDK.im.sendMessageToConversation(conversation, strMessage)
-  //       console.log('send message success')
-  //     }).catch(error => {
-  //       console.log('Client: Failed to openConversation')
-  //     })
-
-  //   }).catch(error => {
-  //     console.log('Client: Failed to find Agent id')
-  //     console.log(error)
-  //   })
-  // }
