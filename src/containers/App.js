@@ -13,7 +13,8 @@ import Aboutus from '../components/Aboutus';
 import Agents from '../components/Agents';
 import FAQ from '../components/FAQ';
 import { Launcher } from "react-chat-window";
-import { Alert, AlertTitle } from '@material-ui/lab'
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { useAlert } from 'react-alert'
 import initialize from "../initialize"; 
 import "./App.css";
 
@@ -88,11 +89,11 @@ class App extends Component {
       } 
     } else {
       console.log("form not fully filled")
-      return(
-        <div className = 'alert'>
-          <Alert severity="warning" onClose={() => {}}>Please ensure no fields are left blank</Alert>
-        </div>
-      ); 
+      // const alert = useAlert()
+      // alert.show('Oh look, an alert!')
+      // return(
+      //     <Alert severity="warning" onClose={() => {}}>Please ensure no fields are left blank</Alert>
+      // ); 
     }
   }
 
