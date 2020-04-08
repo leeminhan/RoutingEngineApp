@@ -11,7 +11,6 @@ const MongoClient = mongodb.MongoClient //gives us access to function necessary 
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'RoutingEngineDB'
 
-
 const rainbowSDK = new RainbowSDK(options);
 rainbowSDK.start();
 rainbowSDK.events.on('rainbow_onready', function() {

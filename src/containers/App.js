@@ -23,11 +23,11 @@ class App extends Component {
     super(props)
     this.state = {
       messageList: [],
-      firstName: null,
-      lastName: null,
-      language: null,
-      chatMode: null,
-      top: null,
+      firstName: "",
+      lastName: "",
+      language: "en-us", //change the lanuageradiobutton setting of 0/1/2/3
+      chatMode: 0,
+      top: 0,
       loginEmail: "",
       loginPassword: "",
       status: "",
