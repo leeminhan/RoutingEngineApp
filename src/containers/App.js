@@ -22,11 +22,11 @@ class App extends Component {
     super(props)
     this.state = {
       messageList: [],
-      firstName: "",
-      lastName: "",
-      language: "en-us",
-      chatMode: 0,
-      top: 0,
+      firstName: null,
+      lastName: null,
+      language: null,
+      chatMode: null,
+      top: null,
       user: "",
       password: "",
       status: "",
