@@ -40,11 +40,11 @@
   
 }
 
-Alert {
+alert {
   width: 100%;
   margin-top: 2px;
-  position: fixed;
-  bottom: 0;
+  position: relative;
+  
 }
 
 

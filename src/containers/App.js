@@ -23,11 +23,12 @@ class App extends Component {
     super(props)
     this.state = {
       messageList: [],
-      firstName: "",
-      lastName: "",
-      language: "en-us", //change the lanuageradiobutton setting of 0/1/2/3
-      chatMode: 0,
-      top: 0,
+      formIncomplete: false,
+      firstName: null,
+      lastName: null,
+      language: null, 
+      chatMode: null,
+      top: null,
       loginEmail: "",
       loginPassword: "",
       status: "",
@@ -79,21 +80,22 @@ class App extends Component {
   submitHandler = async() => {
     if (this.checkValidInputs()) {
       try{
-        this.uploadDatabaseHandler()
-        const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
-        await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
-        // await this.searchByIdHandler(agentStrId)
-        await this.openConversationHandler()
+        console.log("form is fully filled")
+        this.setState({formIncomplete: true});
+        // this.uploadDatabaseHandler()
+        // const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
+        // await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
+        // // await this.searchByIdHandler(agentStrId)
+        // await this.openConversationHandler()
       }catch(error){
         console.log(error)
       } 
     } else {
       console.log("form not fully filled")
+      this.setState({formIncomplete: true});
       // const alert = useAlert()
       // alert.show('Oh look, an alert!')
-      // return(
-      //     <Alert severity="warning" onClose={() => {}}>Please ensure no fields are left blank</Alert>
-      // ); 
+      
     }
   }
 
@@ -254,7 +256,7 @@ class App extends Component {
             onProblemChange = {this.onProblemChangeHandler.bind(this)}
             onSubmit = {this.submitHandler.bind(this)}
           />
-          
+          { this.state.formIncomplete ? <Alert className = 'alert' severity="warning" onClose={() => {}}>Please ensure no fields are left blank</Alert> : null }
           {/* <Aboutus/>
           <Agents/>
           <FAQ/> */}
