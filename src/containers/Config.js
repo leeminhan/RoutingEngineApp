@@ -1,6 +1,6 @@
-let config = {
-    applicationID: "8738ec20647411eabd5d77f18715c55e",
-    applicationSecret: "wuWEJaU1IK685B9ztdt7B1yveY19GS2DCG3mD83ludrYqwTVlPgVkJAiOTjMLQwn",
+let config = { //rbw applications
+    applicationID: "be276f0060f911ea9a6dcf004cf8c14e",
+    applicationSecret: "BQZaEc577I0aTMo34piRvCo55caL1afKRuEtkeGNjqRmbwwRYVIWNCxqZ9GkTgD7"
 }
 
 module.exports = config
