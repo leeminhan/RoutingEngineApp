@@ -23,43 +23,63 @@ class App extends Component {
     super(props)
     this.state = {
       messageList: [],
-      firstName: "",
-      lastName: "",
-      language: "en-us", //change the lanuageradiobutton setting of 0/1/2/3
-      chatMode: 0,
-      top: 0,
       loginEmail: "",
       loginPassword: "",
       status: "",
       agentObject: null,
-      conversationObject: null
+      conversationObject: null,
+      userInfo: {
+        firstName: null,
+        lastName: null,
+        language: null, //change the lanuageradiobutton setting of 0/1/2/3
+        chatMode: null,
+        top: null,
+        queueNumber: 0,
+      }
     }
     initialize();
   }
 
 //------------------------------------------------Form event handlers-----------------------------------------------
   onFirstNameChangeHandler = (event) => {
-    this.setState({firstName: event.target.value});
+    this.setState({
+      userInfo: {
+        firstName: event.target.value
+      }});
   }
 
   onLastNameChangeHandler = (event) => {
-    this.setState({lastName: event.target.value});
+    this.setState({
+      userInfo: {
+        lastName: event.target.value
+      }});
   }
 
   onChatModeChangeHandler = (event) => {
-    this.setState({chatMode: parseInt(event.target.value,10)});
+    this.setState({
+      userInfo: {
+        chatMode: parseInt(event.target.value,10)
+      }
+    });
   }
 
   onLanguageChangeHandler = (event) => {
-    this.setState({language: parseInt(event.target.value,10)});
+    this.setState({
+      userInfo: {
+        language: parseInt(event.target.value,10)
+      }
+    });
   }
 
   onProblemChangeHandler = (event) => {
-    this.setState({top: parseInt(event.target.value,10)});
+    this.setState({
+      userInfo: {
+        top: parseInt(event.target.value,10)}
+    });
   }
   
   uploadDatabaseHandler = async() =>{
-    await axios.post("http://localhost:8000/users", this.state).then(() => {
+    await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
       console.log("Client: Uploaded user information to Database")
     }).catch(error => {
       console.log(error)
@@ -77,7 +97,6 @@ class App extends Component {
   }
 
   submitHandler = async() => {
-    if (this.checkValidInputs()) {
       try{
         this.uploadDatabaseHandler()
         const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
@@ -87,14 +106,6 @@ class App extends Component {
       }catch(error){
         console.log(error)
       } 
-    } else {
-      console.log("form not fully filled")
-      // const alert = useAlert()
-      // alert.show('Oh look, an alert!')
-      // return(
-      //     <Alert severity="warning" onClose={() => {}}>Please ensure no fields are left blank</Alert>
-      // ); 
-    }
   }
 
   createGuestAccHandler = async() => {
@@ -105,7 +116,7 @@ class App extends Component {
         loginEmail: loginCredentials.data.loginEmail,
         loginPassword: loginCredentials.data.password
       })
-      console.log(loginCredentials)
+      console.log("Client: Login Credentials \n",loginCredentials)
       return loginCredentials
       // return (loginCredentials) GET BACK TO THIS ---- do something to wait for this to be done before login() occurs
       // this.signInHandler()
@@ -113,6 +124,7 @@ class App extends Component {
       console.log(error)
     })
   }
+
   signInHandler = (loginEmail, loginPassword) => {
     // Remember to return promise since we are awaiting the promise to be fulfilled before progressing in above submitHandler
     return rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
@@ -147,7 +159,21 @@ class App extends Component {
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
     //Refactor searchByIdHandler out of this handler
 
+    //In the future need to find an API to get agent's availability from the RainbowUI sandbox and update the database
     const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
+    
+    // post req to backend route 
+    await axios.post("http://localhost:8000/agents", this.state.userInfo).then(() => {
+      console.log("Client: Found a matching agent")
+    }).catch(error => {
+      console.log(error)
+    })
+
+    // backend route to find matching agent 
+    // 1. Found Matching agent -> update user queue number to 0 (serving) -> get agentId and send back to frontend. 
+    // 2. No Agents are available -> 
+
+    // Open Conversation Upon Finding Agent: -------------------------------
     const agentObject = await this.searchByIdHandler(agentStrId)
     console.log("Agent Object:\n", agentObject)
 
@@ -166,7 +192,7 @@ class App extends Component {
     try{
       // console.log(this.state.conversationObject)
       // console.log(message)
-      rainbowSDK.im.sendMessageToConversation(this.state.conversationObject, message) //should use this.state.conversationObject
+      rainbowSDK.im.sendMessageToConversation(this.state.conversationObject, message) 
       console.log('Client: Send message success')
     }catch(error){
       console.log('Client: Failed to send message')
