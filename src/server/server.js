@@ -6,6 +6,7 @@ const RainbowSDK = require('rainbow-node-sdk');
 const options = require('./options'); // Import Configurations
 const cors = require('cors')
 const bodyParser = require('body-parser');
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 app.use(cors());
