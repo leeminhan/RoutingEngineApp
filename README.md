@@ -42,6 +42,9 @@ To-do: Modify it to fit our theme and create a rating system
 This section documents the frequently asked questions.
 To-do: improve it as it will be part of our innovative features.
 
+###Radiobutton.css
+Contains styling and alignment for all the components. 
+To-do change its name to smth more generic
 
 
 

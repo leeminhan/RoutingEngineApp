@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Button2 from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {Button} from "react-bootstrap";
-import "./Radiobutton.css";
+import "./Componentstyles.css";
 
 
 const useStyles = makeStyles({

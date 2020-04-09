@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 import Chatradiobutton from './Chatradiobutton';
 import Languageradiobutton from './Languageradiobutton';
 import Enquiryradiobutton from './Enquiryradiobutton';
-import "./Radiobutton.css";
+import "./Componentstyles.css";
 
 const PrefForm = (props) => {
     return (

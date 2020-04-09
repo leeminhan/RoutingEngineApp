@@ -24,6 +24,8 @@ class App extends Component {
     this.state = {
       messageList: [],
       formIncomplete: false,
+      multiplesubmit: false,
+      buttonclicks: 0,
       firstName: null,
       lastName: null,
       language: null, 
@@ -78,9 +80,10 @@ class App extends Component {
   }
 
   submitHandler = async() => {
-    if (this.checkValidInputs()) {
+    this.state.buttonclicks = this.state.buttonclicks + 1; 
+    if (this.checkValidInputs() && this.state.buttonclicks <=2) {
       try{
-        console.log("form is fully filled")
+        console.log("doing api calls")
         this.setState({formIncomplete: true});
         // this.uploadDatabaseHandler()
         // const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
@@ -90,13 +93,14 @@ class App extends Component {
       }catch(error){
         console.log(error)
       } 
-    } else {
-      console.log("form not fully filled")
+    } 
+    if (this.checkValidInputs() != true ) {
       this.setState({formIncomplete: true});
-      // const alert = useAlert()
-      // alert.show('Oh look, an alert!')
-      
     }
+    if (this.state.buttonclicks >2){
+        this.setState({multiplesubmit:true});
+    }
+    
   }
 
   createGuestAccHandler = async() => {
@@ -257,6 +261,7 @@ class App extends Component {
             onSubmit = {this.submitHandler.bind(this)}
           />
           { this.state.formIncomplete ? <Alert className = 'alert' severity="warning" onClose={() => {}}>Please ensure no fields are left blank</Alert> : null }
+          { this.state.multiplesubmit ? <Alert className = 'alert' severity="warning" onClose={() => {}}>No multiple submissions allowed</Alert> : null }
           {/* <Aboutus/>
           <Agents/>
           <FAQ/> */}
