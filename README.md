@@ -27,22 +27,26 @@ To-do: add a link to the cpf board web page.
 ### Languageradiobutton.js Chatradiobutton.js Enquiryradiobutton.js
 These 3 components contain radio buttons for their respective categories. Each button uses an icon as a display. When button is clicked, a green border would appear around the icon and the selected value would be reflected in the state.
 
-###PrefForm.js 
+### PrefForm.js 
 The user preference form is consolidated in this component. It includes the textfields for name inputs, all the radio buttons, and a submit button. When on click, the submit button would make the respective rainbow api calls and upload user input into database,
 
-###Aboutus.js
+### Aboutus.js
 A section describing our services and who are we
 To-do: Modifiy it according to our theme 
 
-###Agents.js
+### Agents.js
 A section for rating our agents. Part of our innovative features.
 To-do: Modify it to fit our theme and create a rating system
 
-###FAQ.js
+### FAQ.js
 This section documents the frequently asked questions.
 To-do: improve it as it will be part of our innovative features.
 
-
+## Backend: API
+const contact = agentid from retrieved rbw CLI
+1. Search Agent ID -> object
+2. openConversationForContact(object)
+3. IM service: sendMessage to 
 
 
 

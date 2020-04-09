@@ -4,6 +4,7 @@ import rainbowSDK from "rainbow-web-sdk";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import { ThemeProvider } from '@livechat/ui-kit';
+import { ToastProvider, useToasts } from 'react-toast-notifications'
 
 //------------------------------------------------Components----------------------------------------------------
 import Navbar from '../components/Navbar';
@@ -135,12 +136,6 @@ class App extends Component {
     })
   }
 
-  // const contact = agentid from retrieved rbw CLI
-
-  // 1. Search Agent ID -> object
-  // 2. openConversationForContact(object)
-  // 3. IM service: sendMessage to 
-
   //Takes in agentId and returns agentObject
   searchByIdHandler = async(agentid) => {
     try {
@@ -160,11 +155,17 @@ class App extends Component {
     //Refactor searchByIdHandler out of this handler
 
     //In the future need to find an API to get agent's availability from the RainbowUI sandbox and update the database
-    const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
+    // const agentStrId = "5e5fdf3bd8084c29e64eb20a" // minhan.lmh@gmail.com acc
+    const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
     
     // post req to backend route 
-    await axios.post("http://localhost:8000/agents", this.state.userInfo).then(() => {
-      console.log("Client: Found a matching agent")
+    await axios.post("http://localhost:8000/agents", this.state.userInfo).then((result) => {
+      if (result == 'online'){
+      console.log("Client: Agent is available. You will be connected shortly")
+      }  
+      else {
+        console.log("Client: Agent is unavailable. Please wait")
+      }
     }).catch(error => {
       console.log(error)
     })
@@ -261,9 +262,7 @@ class App extends Component {
           <source src={require('../Images/Background.mp4')} type="video/mp4" />
                 Your browser does not support the video tag.
         </video>
-
         
-
         {/* Background image and title set in css */}
           <div className='home'> 
 
@@ -300,7 +299,6 @@ class App extends Component {
               messageList={this.state.messageList}
               showEmoji
           />
-
       </div>
     );
   }
