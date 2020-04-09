@@ -44,7 +44,7 @@ const Enquiryradiobutton = (props) => {
             </label>
             {mySpan} */}
             <label>
-                <input type="radio" name="problem" value="6" id="problem6"/>
+                <input type="radio" name="problem" value="5" id="problem6"/>
                 <img id = 'Radioimg' src={require('../Images/Selfemployment.svg')} />
                 Self Employment
             </label>
@@ -56,7 +56,7 @@ const Enquiryradiobutton = (props) => {
             </label>
             {mySpan} */}
             <label>
-                <input type="radio" name="problem" value="8" id="problem8"/>
+                <input type="radio" name="problem" value="6" id="problem8"/>
                 <img id = 'Radioimg' src={require('../Images/Retirement.svg')} />
                 Retirement
             </label>
