@@ -24,7 +24,7 @@ To add- links to the sections of the webpage.
 This is a small section describing what the CPF board is about. 
 To-do: add a link to the cpf board web page.
 
-### Languageradiobutton.js Chatradiobutton.js Enquiryradiobutton.js
+### Languageradiobutton.js, Chatradiobutton.js, Enquiryradiobutton.js
 These 3 components contain radio buttons for their respective categories. Each button uses an icon as a display. When button is clicked, a green border would appear around the icon and the selected value would be reflected in the state.
 
 ###PrefForm.js 
@@ -42,7 +42,7 @@ To-do: Modify it to fit our theme and create a rating system
 This section documents the frequently asked questions.
 To-do: improve it as it will be part of our innovative features.
 
-###Radiobutton.css
+###Componentstyles.css
 Contains styling and alignment for all the components. 
 To-do change its name to smth more generic
 
