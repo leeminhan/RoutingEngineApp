@@ -148,6 +148,8 @@ class App extends Component {
     }
   }
 
+  // To connect with agent
+  // Executed independent of sendingMessage
   openConversationHandler = async(message) => {
 
     //In future, this agentStrID can be hardcoded in the state or best retrieved from the Database
@@ -155,16 +157,19 @@ class App extends Component {
     //Refactor searchByIdHandler out of this handler
 
     //In the future need to find an API to get agent's availability from the RainbowUI sandbox and update the database
+    
     // const agentStrId = "5e5fdf3bd8084c29e64eb20a" // minhan.lmh@gmail.com acc
     const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
     
     // post req to backend route 
-    await axios.post("http://localhost:8000/agents", this.state.userInfo).then((result) => {
-      if (result == 'online'){
+    await axios.post("http://localhost:8000/agents", this.state.userInfo).then((res) => {
+      const availability = (res.data)
+      if (availability === 'online'){
       console.log("Client: Agent is available. You will be connected shortly")
       }  
       else {
         console.log("Client: Agent is unavailable. Please wait")
+        //implement the queuing and repinging
       }
     }).catch(error => {
       console.log(error)
@@ -231,9 +236,9 @@ class App extends Component {
     this.setState({
       messageList: [...this.state.messageList, message]
     })
-    console.log(message)
-    console.log(message.data)
-    console.log(this.state.messageList)
+    console.log("Client: Message Object", message)
+    console.log("Client: Message:", message.data)
+    console.log("Client: Message List", this.state.messageList)
     // this.openConversationHandler(message.data.text)
     this.sendMessageHandler(message.data.text)
   }

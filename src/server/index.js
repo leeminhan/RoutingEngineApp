@@ -31,21 +31,17 @@ const checkAgentStatusHandler = async(agentId) => {
     try{
         const contact = await rainbowSDK.contacts.getContactById(agentId, true);
         const presence = contact.presence;
-        console.log("Contact:", contact)
-        console.log("presence:", presence)
-
-        // const presence = await rainbowSDK.presence.getUserConnectedPresence(agentId)
-        // console.log(presence)
-        // console.log(presence.status)
-        // return presence.status
-
+        // console.log("Contact:", contact)
+        // console.log("presence:", presence)
+        
+        return presence
     }catch(error){
         console.log(error)
     }
 }
 
 /* Admin Service - Create Annoymous Guest Account For User*/
-router.post("/", limiter, (req,res) => {
+router.post("/", (req,res) => {
     try{
         rainbowSDK.admin.createAnonymousGuestUser().then((loginCredentials) => {
             console.log("Guest User Account successfully created")
@@ -62,7 +58,7 @@ router.post("/", limiter, (req,res) => {
 })
 
 // Route to upload new user information to Database
-router.post('/users', limiter,(req,res) => {
+router.post('/users',(req,res) => {
     const userInfo = req.body
     console.log(userInfo)
     try{
@@ -92,25 +88,55 @@ router.post('/agents', (req,res) => {
 
     // 1. Check Agent's TOP and Availabiliity 
     try{
-        MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
+        MongoClient.connect(connectionURL, {useNewUrlParser: true}, async(error, client) => {
             if(error){
                 return console.log("Unable to connect to database")
             }
-            console.log("Agent Route - Connected to Database successfully!")
+            console.log("Agent Route: Connected to Agent's Database successfully!")
             const db = client.db(databaseName)
 
-            db.collection('agent').findOne({ //note: .find no longer works; documentation not updated
-                top: userInfo.top
-            }).then((agentDb) => {
-                // Check agent availability
-                // console.log("Matched Agent TOP:\n", agentDb)
-                // console.log(agentDb.agentId)
-                const temp = "5e84513235c8367f99b94cee"
-                const availability = checkAgentStatusHandler(temp)
+            // 1. Look for agent with matching TOP
+            // found: -> then block: check agent availbility 
+            // -> if yes, return agentId to frontend as input for searchByIdHandler to get agentObject to openConvo
+            // 
+            // not found: -> catch error block
 
-                res.status(200).send(availability)
+            
+            db.collection('agent').findOne({ //note to self: .find no longer works; documentation not updated
+                top: userInfo.top
+            }).then(async(agentDb) => {
+                console.log("Found Agent with matching TOP! Checking availability -----")
+                console.log("AgentDB result:", agentDb)
+                // Check agent availability
+
+                const agentId = agentDb.agentId
+                // console.log("AgentId:", agentId) 
+                // const temp1 = "5e5fdf3bd8084c29e64eb20a"
+                // const temp = "5e84513235c8367f99b94cee"
+                const availability = await checkAgentStatusHandler(agentId)
+                console.log("Agent's Availability:", availability)
+
+                if(availability == "online"){
+                    // Match agent to user -> Update agent to busy
+                    db.collection('agent').updateOne({
+                        agentId: agentId
+                    },{
+                        $set:{
+                            availability: "busy" 
+                        }
+                    }).then((result) => {
+                        console.log("Agent Availability Updated:", result)
+                    }).catch(error => {
+                        console.log("Failed to update agent")
+                        console.log(error)
+                    })
+                    res.status(200).send(availability)
+                }
+                
+                // res.status(200).send(availability)
 
             }).catch((error) => {
+                console.log("No Agent with matching TOP found!")
                 console.log(error)
             })    
         })
