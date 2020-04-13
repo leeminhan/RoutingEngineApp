@@ -1,7 +1,7 @@
 .home {
   background-image: url("../Images/Background2.gif");
-  min-height: 738px;
-  min-width: 100%;
+  width: 100%;
+  height: 100vh;
   text-align: center;
   background-size: cover;
   background-repeat:no-repeat;
@@ -13,7 +13,7 @@
 
 
 .background-video {
-  height: 900px;
+  min-width: 100%;
   position: fixed;
 }
 
@@ -46,6 +46,7 @@ Alert {
   position: fixed;
   bottom: 0;
 }
+
 
 
 
