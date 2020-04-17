@@ -42,42 +42,55 @@ class App extends Component {
   }
 
 //------------------------------------------------Form event handlers-----------------------------------------------
-  onFirstNameChangeHandler = (event) => {
-    this.setState({
-      userInfo: {
-        firstName: event.target.value
-      }});
-  }
+onFirstNameChangeHandler = (event) => {
+  const {value} = event.target;
+  this.setState(prevState => ({
+    userInfo: {                   
+        ...prevState.userInfo,    
+        firstName: value       
+    }
+  }));
+}
 
-  onLastNameChangeHandler = (event) => {
-    this.setState({
-      userInfo: {
-        lastName: event.target.value
-      }});
-  }
+onLastNameChangeHandler = (event) => {
+  const {value} = event.target;
+  this.setState(prevState => ({
+    userInfo: {                   
+        ...prevState.userInfo,    
+        lastName: value       
+    }
+  }));
+}
 
-  onChatModeChangeHandler = (event) => {
-    this.setState({
-      userInfo: {
-        chatMode: parseInt(event.target.value,10)
-      }
-    });
-  }
+onChatModeChangeHandler = (event) => {
+  const {value} = event.target;
+  this.setState(prevState => ({
+    userInfo: {                   
+        ...prevState.userInfo,    
+        chatMode: parseInt(value,10)       
+    }
+  }));
+}
 
-  onLanguageChangeHandler = (event) => {
-    this.setState({
-      userInfo: {
-        language: parseInt(event.target.value,10)
-      }
-    });
-  }
+onLanguageChangeHandler = (event) => {
+  const {value} = event.target;
+  this.setState(prevState => ({
+    userInfo: {                   
+        ...prevState.userInfo,    
+        language: parseInt(value,10)       
+    }
+  }));
+}
 
-  onProblemChangeHandler = (event) => {
-    this.setState({
-      userInfo: {
-        top: parseInt(event.target.value,10)}
-    });
-  }
+onProblemChangeHandler = (event) => {
+  const {value} = event.target;
+  this.setState(prevState => ({
+    userInfo: {                   
+        ...prevState.userInfo,    
+        top: parseInt(value,10)       
+    }
+  }));
+}
   
   uploadDatabaseHandler = async() =>{
     await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
@@ -155,8 +168,6 @@ class App extends Component {
     //In future, this agentStrID can be hardcoded in the state or best retrieved from the Database
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
     //Refactor searchByIdHandler out of this handler
-
-    //In the future need to find an API to get agent's availability from the RainbowUI sandbox and update the database
     
     // const agentStrId = "5e5fdf3bd8084c29e64eb20a" // minhan.lmh@gmail.com acc
     const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
