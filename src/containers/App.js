@@ -143,7 +143,13 @@ onProblemChangeHandler = (event) => {
     // Remember to return promise since we are awaiting the promise to be fulfilled before progressing in above submitHandler
     return rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
       // this.openConversationHandler()
-      console.log('Client: Signed IN!', account)
+      this.setState(prevState => ({
+        userInfo: {                   
+            ...prevState.userInfo,    
+            timestamp: new Date().getTime() //Timestamp in milliseconds
+        }
+      }))
+      console.log(`Client: Signed IN at ${this.state.userInfo.timestamp}!`, account)
     }).catch(error => {
       console.log(error)
     })
@@ -174,7 +180,11 @@ onProblemChangeHandler = (event) => {
     
     // post req to backend route 
     await axios.post("http://localhost:8000/agents", this.state.userInfo).then((res) => {
-      const availability = (res.data)
+      
+    //agentStrId should be retrieved from backend based on match and availability
+      const response = res.data
+      const agentId = res.data.agentId
+      const availability  = res.data.presence
       if (availability === 'online'){
       console.log("Client: Agent is available. You will be connected shortly")
       }  
