@@ -29,6 +29,7 @@ class App extends Component {
       status: "",
       agentObject: null,
       conversationObject: null,
+      agentId: null,
       userInfo: {
         firstName: null,
         lastName: null,
@@ -170,38 +171,34 @@ onProblemChangeHandler = (event) => {
   // To connect with agent
   // Executed independent of sendingMessage
   openConversationHandler = async(message) => {
-
-    //In future, this agentStrID can be hardcoded in the state or best retrieved from the Database
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
-    //Refactor searchByIdHandler out of this handler
-    
+    // Refactor searchByIdHandler out of this handler
     // const agentStrId = "5e5fdf3bd8084c29e64eb20a" // minhan.lmh@gmail.com acc
-    const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
+    // const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
     
-    // post req to backend route 
+    // Retrieve Agent Availbility & agentId 
     await axios.post("http://localhost:8000/agents", this.state.userInfo).then((res) => {
-      
-    //agentStrId should be retrieved from backend based on match and availability
-      const response = res.data
       const agentId = res.data.agentId
       const availability  = res.data.presence
       if (availability === 'online'){
-      console.log("Client: Agent is available. You will be connected shortly")
+        this.setState({agentId: agentId})
+        console.log("Client: Agent is available. You will be connected shortly")
       }  
       else {
         console.log("Client: Agent is unavailable. Please wait")
+        setTimeout(()=>{
+          //code
+        }, 10000)
         //implement the queuing and repinging
+        // this post req has to be done to a different as the backend will now have to check no just
+        // if agent is available but also check for user with shortest timestamp
       }
     }).catch(error => {
       console.log(error)
     })
 
-    // backend route to find matching agent 
-    // 1. Found Matching agent -> update user queue number to 0 (serving) -> get agentId and send back to frontend. 
-    // 2. No Agents are available -> 
-
     // Open Conversation Upon Finding Agent: -------------------------------
-    const agentObject = await this.searchByIdHandler(agentStrId)
+    const agentObject = await this.searchByIdHandler(this.state.agentId)
     console.log("Agent Object:\n", agentObject)
 
     return rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
@@ -214,6 +211,27 @@ onProblemChangeHandler = (event) => {
     })
   }
 
+  // To handle openConversation for users waiting to be connected by initial rejection
+  openConversationHandler2 = async() => {
+    await axios.post("http://localhost:8000/agents/reattempt", this.state.userInfo).then((res) => {
+      const agentId = res.data.agentId
+      const availability  = res.data.presence
+      if (availability === 'online'){
+        this.setState({agentId: agentId})
+        console.log("Client: Agent is available. You will be connected shortly")
+      }  
+      else {
+        console.log("Client: Agent is unavailable. Please wait")
+        //implement the queuing and repinging
+        // this post req has to be done to a different as the backend will now have to check no just
+        // if agent is available but also check for user with shortest timestamp
+      }
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  
   // Expects conversationObject and strMessage
   sendMessageHandler = (message) => {
     try{
@@ -245,6 +263,16 @@ onProblemChangeHandler = (event) => {
         }
       ]
     })
+  }
+
+  closeConversationHandler = async() => {
+    try{
+      await rainbowSDK.conversations.closeConversation(this.state.conversationObject)
+      // axios.post
+      // go to new route Open
+    }catch(error){
+      console.log("Client: closeConversationHandler failed", error)
+    }
   }
 
   componentDidMount = () => {
