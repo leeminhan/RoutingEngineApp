@@ -25,9 +25,7 @@ const limiter = rateLimit({
 });
 
 const checkAgentStatusHandler = async(agentId) => {
-    // Need to put this somewhere I can constantly ping 
     // NodeSDK API: admin.getContactInfos(userId) -> returns Contact object
-
     try{
         const contact = await rainbowSDK.contacts.getContactById(agentId, true);
         const presence = contact.presence;
@@ -89,18 +87,12 @@ router.post('/agents', async(req,res) => {
             // Update agent availbility/status to DB?
             console.log(`Agent ${agent.agentId} is available. Connecting with user now!`)
             res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
+        }else{
+            console.log(`Agent ${agent.agentId} is unavaiable.`)
+            res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
         }
+
         res.status(200).send()
-        // if(agent.top == 'busy'){
-
-        // }
-
-        // MongoClient.connect(connectionURL, {useNewUrlParser: true}, async(error, client) => {
-        //     if(error){
-        //         return console.log("Unable to connect to database")
-        //     }
-        //     console.log("Agent Route: Connected to Agent's Database successfully!")
-        //     const db = client.db(databaseName)
 
         //     // 1. Look for agent with matching TOP
         //     // found: -> then block: check agent availbility 
@@ -139,19 +131,46 @@ router.post('/agents', async(req,res) => {
         //             })
         //             res.status(200).send(availability)
         //         }
-                
-        //         // res.status(200).send(availability)
-
-        //     }).catch((error) => {
-        //         console.log("No Agent with matching TOP found!")
-        //         console.log(error)
-        //     })    
-        // })
-
-
-
+        
     }catch(error){
-        console.log("\n/agents route: Failed to Connect to MongoDB")
+        console.log("\n/agents route: Failed at /agents route")
+        res.status(500).send()
+    }
+})
+
+router.post('/agents/reattempt', async(req, res) => {
+    const userInfo = req.body
+    const query = {
+        top: userInfo.top,
+        
+    }
+    console.log("userInfo:", query)
+    
+    try{
+        // state: this should supposedly be the 2nd user. Therefore need to check the users with 
+        // shortest timestamp but of above TOP
+        const user_queued = await db.findHandler(query)
+
+
+        //shouldn't be using the req objec here
+        //should be using another handler to call 
+        const agent = await db.findHandler(query, 'agent')
+        console.log("Agent Route: Successfully queried database. Result:\n", agent)
+        console.log("agentID:", agent.agentId)
+        
+        const agentAvailability = await checkAgentStatusHandler(agent.agentId)
+        console.log("agentAvailability", agentAvailability)
+        
+        if(agentAvailability == 'online'){
+            // Update agent availbility/status to DB?
+            console.log(`Agent ${agent.agentId} is available. Connecting with user now!`)
+            res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
+        }else{
+            console.log(`Agent ${agent.agentId} is unavaiable.`)
+            res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
+        }
+    }catch(error){
+        console.log("\n/agents/reattempt route: Failed /agents/reattempt route")
         res.status(500).send()
     }
 })
