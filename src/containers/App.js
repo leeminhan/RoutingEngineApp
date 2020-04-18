@@ -30,6 +30,7 @@ class App extends Component {
       agentObject: null,
       conversationObject: null,
       agentId: null,
+      connected: false,
       userInfo: {
         firstName: null,
         lastName: null,
@@ -37,6 +38,7 @@ class App extends Component {
         chatMode: null,
         top: null,
         queueNumber: 0,
+        timestamp: 0,
       }
     }
     initialize();
@@ -94,6 +96,10 @@ onProblemChangeHandler = (event) => {
 }
   
   uploadDatabaseHandler = async() =>{
+    const timestamp = new Date().getTime()
+    await this.setState({ userInfo: { ...this.state.userInfo, timestamp: timestamp} });
+    console.log(this.state.userInfo.timestamp)
+
     await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
       console.log("Client: Uploaded user information to Database")
     }).catch(error => {
@@ -144,12 +150,6 @@ onProblemChangeHandler = (event) => {
     // Remember to return promise since we are awaiting the promise to be fulfilled before progressing in above submitHandler
     return rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
       // this.openConversationHandler()
-      this.setState(prevState => ({
-        userInfo: {                   
-            ...prevState.userInfo,    
-            timestamp: new Date().getTime() //Timestamp in milliseconds
-        }
-      }))
       console.log(`Client: Signed IN at ${this.state.userInfo.timestamp}!`, account)
     }).catch(error => {
       console.log(error)
@@ -168,7 +168,6 @@ onProblemChangeHandler = (event) => {
     }
   }
 
-  // To connect with agent
   // Executed independent of sendingMessage
   openConversationHandler = async(message) => {
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
@@ -177,17 +176,31 @@ onProblemChangeHandler = (event) => {
     // const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
     
     // Retrieve Agent Availbility & agentId 
-    await axios.post("http://localhost:8000/agents", this.state.userInfo).then((res) => {
+    await axios.post("http://localhost:8000/agents", this.state.userInfo).then(async(res) => {
       const agentId = res.data.agentId
       const availability  = res.data.presence
+      
       if (availability === 'online'){
         this.setState({agentId: agentId})
         console.log("Client: Agent is available. You will be connected shortly")
+
+        const agentObject = await this.searchByIdHandler(this.state.agentId)
+        console.log("Agent Object:\n", agentObject)
+
+        try{
+          const conversation = await rainbowSDK.conversations.openConversationForContact(agentObject)
+          console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
+          this.setState({conversationObject: conversation})
+          return conversation
+        }catch(error){
+          console.log('Client: Failed to openConversation')
+        }
       }  
       else {
         console.log("Client: Agent is unavailable. Please wait")
-        setTimeout(()=>{
-          //code
+        const ping = setInterval(()=>{
+          // call the new handler that will that find users earliest timestamp/
+          console.log("In ping")
         }, 10000)
         //implement the queuing and repinging
         // this post req has to be done to a different as the backend will now have to check no just
@@ -198,17 +211,17 @@ onProblemChangeHandler = (event) => {
     })
 
     // Open Conversation Upon Finding Agent: -------------------------------
-    const agentObject = await this.searchByIdHandler(this.state.agentId)
-    console.log("Agent Object:\n", agentObject)
+    // const agentObject = await this.searchByIdHandler(this.state.agentId)
+    // console.log("Agent Object:\n", agentObject)
 
-    return rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-      console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
-      this.setState({conversationObject: conversation})
-      // this.sendMessageHandler(message)
-      return conversation
-    }).catch(error => {
-      console.log('Client: Failed to openConversation')
-    })
+    // return rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
+    //   console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
+    //   this.setState({conversationObject: conversation})
+    //   // this.sendMessageHandler(message)
+    //   return conversation
+    // }).catch(error => {
+    //   console.log('Client: Failed to openConversation')
+    // })
   }
 
   // To handle openConversation for users waiting to be connected by initial rejection
