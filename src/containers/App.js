@@ -38,7 +38,7 @@ class App extends Component {
         chatMode: null,
         top: null,
         queueNumber: 0,
-        timestamp: 0,
+        timestamp: 0, // will be unique for every user hence can be used as an id
       }
     }
     initialize();
@@ -172,16 +172,17 @@ onProblemChangeHandler = (event) => {
   openConversationHandler = async(message) => {
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
     // Refactor searchByIdHandler out of this handler
-    // const agentStrId = "5e5fdf3bd8084c29e64eb20a" // minhan.lmh@gmail.com acc
-    // const agentStrId = "5e84513235c8367f99b94cee" // testacc1@gmail.com acc
-    
+
     // Retrieve Agent Availbility & agentId 
     await axios.post("http://localhost:8000/agents", this.state.userInfo).then(async(res) => {
       const agentId = res.data.agentId
       const availability  = res.data.presence
       
       if (availability === 'online'){
-        this.setState({agentId: agentId})
+        this.setState({
+          agentId: agentId,
+          connected: true
+        })
         console.log("Client: Agent is available. You will be connected shortly")
 
         const agentObject = await this.searchByIdHandler(this.state.agentId)
@@ -191,50 +192,57 @@ onProblemChangeHandler = (event) => {
           const conversation = await rainbowSDK.conversations.openConversationForContact(agentObject)
           console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
           this.setState({conversationObject: conversation})
-          return conversation
+          return conversation // exits here if agent openConversation successfully
+
         }catch(error){
           console.log('Client: Failed to openConversation')
         }
       }  
       else {
         console.log("Client: Agent is unavailable. Please wait")
+
+        await this.openConversationHandler2()
+        
         const ping = setInterval(()=>{
-          // call the new handler that will that find users earliest timestamp/
-          console.log("In ping")
+          const toConnectOutcome = this.openConversationHandler2() // new handler that will that find users earliest timestamp
+          if(toConnectOutcome == 1){
+            console.log('Client: Breaking out of interval')
+            clearInterval(ping) //break out
+          }
+          console.log("Client: Still queuing/waiting to be matched. ping.")
         }, 10000)
-        //implement the queuing and repinging
-        // this post req has to be done to a different as the backend will now have to check no just
-        // if agent is available but also check for user with shortest timestamp
       }
     }).catch(error => {
       console.log(error)
     })
-
-    // Open Conversation Upon Finding Agent: -------------------------------
-    // const agentObject = await this.searchByIdHandler(this.state.agentId)
-    // console.log("Agent Object:\n", agentObject)
-
-    // return rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-    //   console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
-    //   this.setState({conversationObject: conversation})
-    //   // this.sendMessageHandler(message)
-    //   return conversation
-    // }).catch(error => {
-    //   console.log('Client: Failed to openConversation')
-    // })
   }
 
   // To handle openConversation for users waiting to be connected by initial rejection
   openConversationHandler2 = async() => {
-    await axios.post("http://localhost:8000/agents/reattempt", this.state.userInfo).then((res) => {
-      const agentId = res.data.agentId
-      const availability  = res.data.presence
-      if (availability === 'online'){
-        this.setState({agentId: agentId})
+    await axios.post("http://localhost:8000/agents/reattempt", this.state.userInfo).then(async(res) => {
+      
+      console.log(res)
+      const toConnect = res.data.toConnect
+
+      if (toConnect == true){
+        this.setState({
+          agentId: res.data.agentId,
+          connected: true
+        })
         console.log("Client: Agent is available. You will be connected shortly")
+
+        const agentObject = await this.searchByIdHandler(this.state.agentId)
+        console.log("Agent Object:\n", agentObject)
+
+        const conversation = await rainbowSDK.conversations.openConversationForContact(agentObject)
+        console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
+        this.setState({conversationObject: conversation})
+
+        return 1 //Found agent 
       }  
       else {
         console.log("Client: Agent is unavailable. Please wait")
+        return 0
         //implement the queuing and repinging
         // this post req has to be done to a different as the backend will now have to check no just
         // if agent is available but also check for user with shortest timestamp
@@ -281,8 +289,13 @@ onProblemChangeHandler = (event) => {
   closeConversationHandler = async() => {
     try{
       await rainbowSDK.conversations.closeConversation(this.state.conversationObject)
-      // axios.post
-      // go to new route Open
+      console.log("Conversation closed")
+      
+      axios.post('/users/delete', this.state.userInfo.timestamp).then((res) => {
+        console.log("Client: Deleted user successful")
+      }).catch(error => {
+        console.log('Client: Delete user failed')
+      })
     }catch(error){
       console.log("Client: closeConversationHandler failed", error)
     }
