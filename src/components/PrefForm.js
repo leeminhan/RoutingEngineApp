@@ -4,7 +4,8 @@ import {Button} from "react-bootstrap";
 import Chatradiobutton from './Chatradiobutton';
 import Languageradiobutton from './Languageradiobutton';
 import Enquiryradiobutton from './Enquiryradiobutton';
-import Loadingdisplay from "../components/Loadingdisplay";
+import Loadingdisplay from "./Loadingdisplay";
+import Search from './Search'
 import "./Componentstyles.css";
 
 const PrefForm = (props) => {
@@ -103,6 +104,8 @@ const PrefForm = (props) => {
             </Button>
             <br></br> 
             <Loadingdisplay className = 'loadingSign' loadingState = {props.loadingState}/>
+            <br></br> 
+            {/* <Search/> */}
           </div>
         </div>
     );

@@ -11,6 +11,7 @@ import "./App.css";
 import Navbar from '../components/Navbar';
 import PrefForm from '../components/PrefForm';
 import CPFBoard from "../components/CPFBoard";
+import FAQ from "../components/FAQ";
 import { Launcher } from "react-chat-window";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,24 +36,26 @@ class App extends Component {
       status: "",
       agentObject: null,
       conversationObject: null,
-      submitTime: 0,
-      numMessage: 0,
-      openWindowTime: 0,
-      loadingState: null,
-      isOpen: false,
+      submitTime: 0,  // Stores time where form is submitted. For checking of more than one submit within a minute
+      numMessage: 0,  // Checks number of messages sent by user. For checking of spam
+      openWindowTime: 0, // Stores the time when the chat window is opened. For checking of Spam
+      isOpen: false,  // Checks whether chat window is open
+      agentId: null,
+      connected: null,
       userInfo: {
         firstName: null,
         lastName: null,
-        language: null, 
+        language: null, //change the lanuageradiobutton setting of 0/1/2/3
         chatMode: null,
         top: null,
         queueNumber: 0,
+        timestamp: 0, // will be unique for every user hence can be used as an id
       }
     }
     initialize();
   }
 
-//------------------------------------------------Form event handlers-----------------------------------------------
+  //------------------------------------------------Form event handlers-----------------------------------------------
   onFirstNameChangeHandler = (event) => {
     const {value} = event.target;
     this.setState(prevState => ({
@@ -103,13 +106,14 @@ class App extends Component {
     }));
   }
 
+  //------------------------------------------------Robustness checkers-----------------------------------------------
+
   // Checks whether user is spamming
   checkForSpam = (message) => {
     const newMessagesCount = this.state.numMessage + 1;
     this.setState({numMessage: newMessagesCount})
     const now = new Date();
     const timeElapsed = (now.getTime() - this.state.openWindowTime)/1000;
-
     if ((newMessagesCount/timeElapsed) > 1  && newMessagesCount > 10) {
       toast.error('Pls do not spam',{
         toastId: 'spamMsg',
@@ -117,9 +121,8 @@ class App extends Component {
       });
       this._handleClick();
     }
-    
   }
-  
+    
   // Check whether all fields have been completed by user
   checkValidInputs = () => {
     const inputs = [this.state.userInfo['firstName'],this.state.userInfo['lastName'],this.state.userInfo['chatMode'],this.state.userInfo['language'],this.state.userInfo['top']];
@@ -150,26 +153,19 @@ class App extends Component {
     }
   }
 
+  //------------------------------------------------Form submit handlers-----------------------------------------------
+
   submitHandler = async() => {
     if (this.checkValidInputs() && this.checkMultipleSubmit()) {
       try{
-        console.log("doing api calls")
         const now = new Date();
         this.setState({submitTime:now.getTime()});
-
         this.uploadDatabaseHandler()
-        this.setState({loadingState:'uploadDB' });
-
+        this.setState({connected:false});
         const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
-        
-
         await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
-        
-
         // await this.searchByIdHandler(agentStrId)
-        
         await this.openConversationHandler()
-        
       }catch(error){
         console.log(error)
       } 
@@ -177,7 +173,10 @@ class App extends Component {
   }
 
   uploadDatabaseHandler = async() =>{
-    await axios.post("http://localhost:8000/users", this.state).then(() => {
+    const timestamp = new Date().getTime()
+    await this.setState({ userInfo: { ...this.state.userInfo, timestamp: timestamp} });
+    console.log(this.state.userInfo.timestamp)
+    await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
       console.log("Client: Uploaded user information to Database")
     }).catch(error => {
       console.log(error)
@@ -192,7 +191,7 @@ class App extends Component {
         loginEmail: loginCredentials.data.loginEmail,
         loginPassword: loginCredentials.data.password
       })
-      console.log(loginCredentials)
+      console.log("Client: Login Credentials \n",loginCredentials)
       return loginCredentials
       // return (loginCredentials) GET BACK TO THIS ---- do something to wait for this to be done before login() occurs
       // this.signInHandler()
@@ -200,21 +199,16 @@ class App extends Component {
       console.log(error)
     })
   }
+
   signInHandler = (loginEmail, loginPassword) => {
     // Remember to return promise since we are awaiting the promise to be fulfilled before progressing in above submitHandler
     return rainbowSDK.connection.signin(loginEmail, loginPassword).then(account => {
       // this.openConversationHandler()
-      console.log('Client: Signed IN!', account)
+      console.log(`Client: Signed IN at ${this.state.userInfo.timestamp}!`, account)
     }).catch(error => {
       console.log(error)
     })
   }
-
-  // const contact = agentid from retrieved rbw CLI
-
-  // 1. Search Agent ID -> object
-  // 2. openConversationForContact(object)
-  // 3. IM service: sendMessage to 
 
   //Takes in agentId and returns agentObject
   searchByIdHandler = async(agentid) => {
@@ -228,32 +222,102 @@ class App extends Component {
     }
   }
 
+  // Executed independent of sendingMessage
   openConversationHandler = async(message) => {
-
-    //In future, this agentStrID can be hardcoded in the state or best retrieved from the Database
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
-    //Refactor searchByIdHandler out of this handler
+    // Refactor searchByIdHandler out of this handler
+    // Retrieve Agent Availbility & agentId 
+    await axios.post("http://localhost:8000/agents", this.state.userInfo).then(async(res) => {
+      const agentId = res.data.agentId
+      const availability  = res.data.presence
+      
+      if (availability === 'online'){
+        this.setState({
+          agentId: agentId,
+          connected: true
+        })
+        console.log("Client: Agent is available. You will be connected shortly")
 
-    const agentStrId = "5e5fdf3bd8084c29e64eb20a" //"5e84513235c8367f99b94cee"
-    const agentObject = await this.searchByIdHandler(agentStrId)
-    console.log("Agent Object:\n", agentObject)
+        const agentObject = await this.searchByIdHandler(this.state.agentId)
+        console.log("Agent Object:\n", agentObject)
 
-    return rainbowSDK.conversations.openConversationForContact(agentObject).then((conversation) => {
-      console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
-      this.setState({conversationObject: conversation})
-      // this.sendMessageHandler(message)
-      return conversation
+        try{
+          const conversation = await rainbowSDK.conversations.openConversationForContact(agentObject)
+          console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
+          this.setState({conversationObject: conversation})
+          return conversation // exits here if agent openConversation successfully
+
+        }catch(error){
+          console.log('Client: Failed to openConversation')
+        }
+      }  
+      else {
+        console.log("Client: Agent is unavailable. Please wait")
+
+        // await this.openConversationHandler2()
+        
+        const ping = setInterval( () =>{
+          
+          const toConnectOutcome = this.openConversationHandler2() // new handler that will that find users earliest timestamp
+          if(toConnectOutcome === 1){
+            console.log('Client: Breaking out of interval')
+            clearInterval(ping) //break out
+
+          }
+          console.log("Client: Still queuing/waiting to be matched. ping.")
+        }, 10000)
+      }
     }).catch(error => {
-      console.log('Client: Failed to openConversation')
+      console.log(error)
     })
   }
+
+  // To handle openConversation for users waiting to be connected by initial rejection
+  openConversationHandler2 = async() => {
+    await axios.post("http://localhost:8000/agents/reattempt", this.state.userInfo).then(async(res) => {
+      
+      console.log(res)
+      const toConnect = res.data.toConnect
+
+      if (toConnect == true){
+        this.setState({
+          agentId: res.data.agentId,
+          connected: true
+        })
+        console.log("Client: Agent is available. You will be connected shortly")
+
+        const agentObject = await this.searchByIdHandler(this.state.agentId)
+        console.log("Agent Object:\n", agentObject)
+
+        const conversation = await rainbowSDK.conversations.openConversationForContact(agentObject)
+        console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
+        this.setState({conversationObject: conversation})
+
+        return 1 //Found agent 
+      }  
+      else {
+        console.log("Client: Agent is unavailable. Please wait")
+        return 0
+        //implement the queuing and repinging
+        // this post req has to be done to a different as the backend will now have to check no just
+        // if agent is available but also check for user with shortest timestamp
+      }
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+    
+    
+    
+  //------------------------------------------------Chatting handlers-----------------------------------------------
 
   // Expects conversationObject and strMessage
   sendMessageHandler = (message) => {
     try{
       // console.log(this.state.conversationObject)
       // console.log(message)
-      rainbowSDK.im.sendMessageToConversation(this.state.conversationObject, message) //should use this.state.conversationObject
+      rainbowSDK.im.sendMessageToConversation(this.state.conversationObject, message) 
       console.log('Client: Send message success')
     }catch(error){
       console.log('Client: Failed to send message')
@@ -264,7 +328,6 @@ class App extends Component {
   onNewMessageReceived = (event) =>  {
     let message = event.detail.message;
     let conversation = event.detail.conversation
-
     console.log(message)
     console.log(message.data)
     const incomingMessage = message.data
@@ -281,19 +344,31 @@ class App extends Component {
     })
   }
 
+  closeConversationHandler = async() => {
+    try{
+      await rainbowSDK.conversations.closeConversation(this.state.conversationObject)
+      console.log("Conversation closed")
+      axios.post('/users/delete', this.state.userInfo.timestamp).then((res) => {
+        console.log("Client: Deleted user successful")
+      }).catch(error => {
+        console.log('Client: Delete user failed')
+      })
+    }catch(error){
+      console.log("Client: closeConversationHandler failed", error)
+    }
+  }
+
   componentDidMount = () => {
     document.addEventListener(rainbowSDK.im.RAINBOW_ONNEWIMMESSAGERECEIVED, this.onNewMessageReceived);
   }
-  
-//------------------------------------------------Launcher event handlers-----------------------------------------------
 
   _onMessageWasSent = (message) => { //message is the input to the launcher
     this.setState({
       messageList: [...this.state.messageList, message]
     })
-    // console.log(message)
-    // console.log(message.data)
-    // console.log(this.state.messageList)
+    console.log("Client: Message Object", message)
+    console.log("Client: Message:", message.data)
+    console.log("Client: Message List", this.state.messageList)
     // this.openConversationHandler(message.data.text)
     this.checkForSpam(message)
     this.sendMessageHandler(message.data.text)
@@ -313,15 +388,16 @@ class App extends Component {
         ]
       })
     } 
-    
-
   }
-  
+    
   _handleClick() {
     this.setState({isOpen:!this.state.isOpen});
     const now = new Date();
     this.setState({openWindowTime: now.getTime()});
+    this.closeConversationHandler();
   }
+
+  //------------------------------------------------HTML Layout-----------------------------------------------
 
   render() {
     return (
@@ -350,17 +426,16 @@ class App extends Component {
             onProblemChange = {this.onProblemChangeHandler.bind(this)}
             problemValue = {this.state.userInfo['top']}
             onSubmit = {this.submitHandler.bind(this)}
-            loadingState = {this.state.loadingState}
+            loadingState = {this.state.connected}
           />
-          
-          
+          <FAQ/>
         </div>
 
         {/* Navigation bar */}
         <div className = 'NavBar'>
           <Navbar/>
         </div>
-
+        
         <Launcher
               agentProfile={{
                 teamName: `Let's Be Team Players`,
@@ -372,7 +447,6 @@ class App extends Component {
               isOpen = {this.state.isOpen}
               showEmoji
           />
-
       </div>
     );
   }
