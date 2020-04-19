@@ -3,7 +3,6 @@ import rainbowSDK from "rainbow-web-sdk";
 // import config from './Config';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
-import { ThemeProvider } from '@livechat/ui-kit';
 import { ToastProvider, useToasts } from 'react-toast-notifications'
 
 //------------------------------------------------Components----------------------------------------------------
@@ -13,6 +12,7 @@ import CPFBoard from "../components/CPFBoard";
 import Aboutus from '../components/Aboutus';
 import Agents from '../components/Agents';
 import FAQ from '../components/FAQ';
+import Search from '../components/Search'
 import { Launcher } from "react-chat-window";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { useAlert } from 'react-alert'
@@ -201,13 +201,15 @@ onProblemChangeHandler = (event) => {
       else {
         console.log("Client: Agent is unavailable. Please wait")
 
-        await this.openConversationHandler2()
+        // await this.openConversationHandler2()
         
-        const ping = setInterval(()=>{
+        const ping = setInterval( () =>{
+          
           const toConnectOutcome = this.openConversationHandler2() // new handler that will that find users earliest timestamp
-          if(toConnectOutcome == 1){
+          if(toConnectOutcome === 1){
             console.log('Client: Breaking out of interval')
             clearInterval(ping) //break out
+
           }
           console.log("Client: Still queuing/waiting to be matched. ping.")
         }, 10000)
@@ -368,7 +370,9 @@ onProblemChangeHandler = (event) => {
         {/* Navigation bar */}
         <div className = 'NavBar'>
           <Navbar/>
+          <Search/>
         </div>
+        
 
         <Launcher
               agentProfile={{
