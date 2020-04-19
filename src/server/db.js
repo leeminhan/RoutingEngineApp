@@ -1,10 +1,11 @@
 const mongodb = require('mongodb')
 const MongoClient = mongodb.MongoClient
-const connectionURL = 'mongodb://127.0.0.1:27017/RoutingEngineDB'
+// const connectionURL = 'mongodb://127.0.0.1:27017/RoutingEngineDB'
+const connectionAtlasURL = 'mongodb+srv://minhan:Sutd@1234@cluster0-ptwab.mongodb.net/test' //put into git ignore once proj ends
 const databaseName = 'RoutingEngineDB'
 
 // MongoClient.connect(connectionURL, {useNewUrlParser: true}, async(error, client)
-const client = new MongoClient(connectionURL, { useNewUrlParser: true, useUnifiedTopology: true});
+const client = new MongoClient(connectionAtlasURL, { useNewUrlParser: true, useUnifiedTopology: true});
 
 const insertHandler = async(data, collectionName) => {
     // client.connect() should one called once -- IMPORTANT
