@@ -1,4 +1,4 @@
-# 50.003
+# 50.003 Element of Software Construction
 
 ## Objective
 To develop a routing engine that routes incoming support requests (chat and audio calls) to the right agent based on agent availability, skills etc.
@@ -10,7 +10,13 @@ A routing engine that routes incoming chat and audio call requests to the right 
 ## Usage
 
 ```
-
+Frontend:
+npm install
+npm start
+```
+```
+Backend:
+node server.js
 ```
 Running on localhost:3000
 
@@ -49,5 +55,30 @@ const contact = agentid from retrieved rbw CLI
 3. IM service: sendMessage to 
 
 
+## Agent Schema
+id:
+firstName:
+lastName: 
+top:
+availability: 
 
+## User Schema
+id: 
+firstName:
+lastName: 
+language:
+chatMode:
+top:
+timestamp:
+ticketNo:
 
+## Rainbow CLI Agent Accounts
+| Name          | Login Email           | Company          | Account  | Roles                 | Active | ID                       |
+| ------------- |:---------------------:| ----------------:| --------:| ---------------------:| ------:| ------------------------:|
+| agent_1 top_1 | agent1_top1@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bebbed16d013e6a668384 |
+| agent_2 top_2 | agent2_top2@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bebf5d16d013e6a66839f |
+| agent_3 top_3 | agent3_top3@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bece4d16d013e6a668498 |
+| agent_4 top_4 | agent4_top4@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bebbed16d013e6a668384 |
+| agent_5 top_5 | agent5_top5@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bebf5d16d013e6a66839f |
+| agent_6 top_6 | agent6_top6@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bece4d16d013e6a668498 |
+| Min Han Lee   | minhan.lmh@gmail.com  | RoutingEngineApp | free     | user,admin,app_admin  | true   | 5e9bece4d16d013e6a668498 |
