@@ -135,6 +135,7 @@ router.post('/agents/reattempt', async(req, res) => {
 
 // Route to remove user from database/queue once user is done with the call
 router.post('/users/delete', async(req,res) => {
+    console.log('req', req.body)
     const timestamp = req.body.timestamp
     const query = {
         timestamp: timestamp

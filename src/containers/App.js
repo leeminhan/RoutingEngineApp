@@ -319,9 +319,6 @@ class App extends Component {
     console.log(this.state.openConvo2Status)
     return this.state.openConvo2Status
   }
-
-    
-    
     
   //------------------------------------------------Chatting handlers-----------------------------------------------
 
@@ -359,13 +356,16 @@ class App extends Component {
 
   closeConversationHandler = async() => {
     try{
-      await rainbowSDK.conversations.closeConversation(this.state.conversationObject)
       console.log("Conversation closed")
-      axios.post('/users/delete', this.state.userInfo.timestamp).then((res) => {
+      console.log("timestamp:",  this.state.userInfo.timestamp )
+      const info = {timestamp: this.state.userInfo.timestamp}
+      axios.post('http://localhost:8000/users/delete', info).then((res) => {
         console.log("Client: Deleted user successful")
       }).catch(error => {
         console.log('Client: Delete user failed')
+        console.log(error)
       })
+      await rainbowSDK.conversations.closeConversation(this.state.conversationObject)
     }catch(error){
       console.log("Client: closeConversationHandler failed", error)
     }
@@ -402,12 +402,14 @@ class App extends Component {
       })
     } 
   }
-    
+
   _handleClick() {
+    if (this.state.isOpen) {
+      this.closeConversationHandler();
+    }
     this.setState({isOpen:!this.state.isOpen});
     const now = new Date();
     this.setState({openWindowTime: now.getTime()});
-    this.closeConversationHandler();
   }
 
   //------------------------------------------------HTML Layout-----------------------------------------------
