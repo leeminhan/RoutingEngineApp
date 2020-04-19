@@ -3,21 +3,28 @@ import rainbowSDK from "rainbow-web-sdk";
 // import config from './Config';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
-import { ToastProvider, useToasts } from 'react-toast-notifications'
+import { ThemeProvider } from '@livechat/ui-kit';
+import initialize from "../initialize"; 
+import "./App.css";
 
 //------------------------------------------------Components----------------------------------------------------
 import Navbar from '../components/Navbar';
 import PrefForm from '../components/PrefForm';
 import CPFBoard from "../components/CPFBoard";
-import Aboutus from '../components/Aboutus';
-import Agents from '../components/Agents';
-import FAQ from '../components/FAQ';
-import Search from '../components/Search'
+import FAQ from "../components/FAQ";
 import { Launcher } from "react-chat-window";
-import { Alert, AlertTitle } from '@material-ui/lab';
-import { useAlert } from 'react-alert'
-import initialize from "../initialize"; 
-import "./App.css";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Configure toast component for usage
+toast.configure({
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+});
 
 class App extends Component {
   constructor(props) {
@@ -29,8 +36,12 @@ class App extends Component {
       status: "",
       agentObject: null,
       conversationObject: null,
+      submitTime: 0,  // Stores time where form is submitted. For checking of more than one submit within a minute
+      numMessage: 0,  // Checks number of messages sent by user. For checking of spam
+      openWindowTime: 0, // Stores the time when the chat window is opened. For checking of Spam
+      isOpen: false,  // Checks whether chat window is open
       agentId: null,
-      connected: false,
+      connected: null,
       toPing: false,
       openConvo2Status: null,
       userInfo: {
@@ -46,82 +57,113 @@ class App extends Component {
     initialize();
   }
 
-//------------------------------------------------Form event handlers-----------------------------------------------
-onFirstNameChangeHandler = (event) => {
-  const {value} = event.target;
-  this.setState(prevState => ({
-    userInfo: {                   
-        ...prevState.userInfo,    
-        firstName: value       
-    }
-  }));
-}
-
-onLastNameChangeHandler = (event) => {
-  const {value} = event.target;
-  this.setState(prevState => ({
-    userInfo: {                   
-        ...prevState.userInfo,    
-        lastName: value       
-    }
-  }));
-}
-
-onChatModeChangeHandler = (event) => {
-  const {value} = event.target;
-  this.setState(prevState => ({
-    userInfo: {                   
-        ...prevState.userInfo,    
-        chatMode: parseInt(value,10)       
-    }
-  }));
-}
-
-onLanguageChangeHandler = (event) => {
-  const {value} = event.target;
-  this.setState(prevState => ({
-    userInfo: {                   
-        ...prevState.userInfo,    
-        language: parseInt(value,10)       
-    }
-  }));
-}
-
-onProblemChangeHandler = (event) => {
-  const {value} = event.target;
-  this.setState(prevState => ({
-    userInfo: {                   
-        ...prevState.userInfo,    
-        top: parseInt(value,10)       
-    }
-  }));
-}
-  
-  uploadDatabaseHandler = async() =>{
-    const timestamp = new Date().getTime()
-    await this.setState({ userInfo: { ...this.state.userInfo, timestamp: timestamp} });
-    console.log(this.state.userInfo.timestamp)
-
-    await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
-      console.log("Client: Uploaded user information to Database")
-    }).catch(error => {
-      console.log(error)
-    })
+  //------------------------------------------------Form event handlers-----------------------------------------------
+  onFirstNameChangeHandler = (event) => {
+    const {value} = event.target;
+    this.setState(prevState => ({
+      userInfo: {                   
+          ...prevState.userInfo,    
+          firstName: value       
+      }
+    }));
   }
 
+  onLastNameChangeHandler = (event) => {
+    const {value} = event.target;
+    this.setState(prevState => ({
+      userInfo: {                   
+          ...prevState.userInfo,    
+          lastName: value       
+      }
+    }));
+  }
+
+  onChatModeChangeHandler = (event) => {
+    const {value} = event.target;
+    this.setState(prevState => ({
+      userInfo: {                   
+          ...prevState.userInfo,    
+          chatMode: parseInt(value,10)       
+      }
+    }));
+  }
+
+  onLanguageChangeHandler = (event) => {
+    const {value} = event.target;
+    this.setState(prevState => ({
+      userInfo: {                   
+          ...prevState.userInfo,    
+          language: parseInt(value,10)       
+      }
+    }));
+  }
+
+  onProblemChangeHandler = (event) => {
+    const {value} = event.target;
+    this.setState(prevState => ({
+      userInfo: {                   
+          ...prevState.userInfo,    
+          top: parseInt(value,10)       
+      }
+    }));
+  }
+
+  //------------------------------------------------Robustness checkers-----------------------------------------------
+
+  // Checks whether user is spamming
+  checkForSpam = (message) => {
+    const newMessagesCount = this.state.numMessage + 1;
+    this.setState({numMessage: newMessagesCount})
+    const now = new Date();
+    const timeElapsed = (now.getTime() - this.state.openWindowTime)/1000;
+    if ((newMessagesCount/timeElapsed) > 1  && newMessagesCount > 10) {
+      toast.error('Pls do not spam',{
+        toastId: 'spamMsg',
+        className: 'spamMsg',
+      });
+      this._handleClick();
+    }
+  }
+    
   // Check whether all fields have been completed by user
   checkValidInputs = () => {
-    const inputs = [this.state.firstName, this.state.lastName, this.state.chatMode ,this.state.language, this.state.top];
+    const inputs = [this.state.userInfo['firstName'],this.state.userInfo['lastName'],this.state.userInfo['chatMode'],this.state.userInfo['language'],this.state.userInfo['top']];
+    console.log(inputs)
     if (inputs.includes(null)){
+      toast.error('You have empty fields',{
+        toastId: 'nullInput',
+        className: 'nullInput',
+      });
       return false;
     } else {
       return true ;
     }
   }
 
+  // Check whether last submit was more than 60s ago
+  checkMultipleSubmit = () => {
+    const now = new Date();
+    const timeDiff = (now.getTime() - this.state.submitTime) / 1000;
+    if (timeDiff > 60) {
+      return true;
+    } else {
+      toast.error('No more than 1 submission per minute',{
+        toastId: 'multipleSubmit',
+        className: 'multipleSubmit',
+      });
+      return false;
+    }
+  }
+
+  //------------------------------------------------Form submit handlers-----------------------------------------------
+
   submitHandler = async() => {
+    if (this.checkValidInputs() && this.checkMultipleSubmit()) {
       try{
+        const now = new Date();
+        this.setState({submitTime:now.getTime()});
         this.uploadDatabaseHandler()
+        this.setState({connected:false});
         const loginCredentials  = await this.createGuestAccHandler() //must have await as this handler is a promise itself; otherwise will show promise<pending>
         await this.signInHandler(loginCredentials.data.loginEmail, loginCredentials.data.password)
         // await this.searchByIdHandler(agentStrId)
@@ -129,6 +171,18 @@ onProblemChangeHandler = (event) => {
       }catch(error){
         console.log(error)
       } 
+    }
+  }
+
+  uploadDatabaseHandler = async() =>{
+    const timestamp = new Date().getTime()
+    await this.setState({ userInfo: { ...this.state.userInfo, timestamp: timestamp} });
+    console.log(this.state.userInfo.timestamp)
+    await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
+      console.log("Client: Uploaded user information to Database")
+    }).catch(error => {
+      console.log(error)
+    })
   }
 
   createGuestAccHandler = async() => {
@@ -174,7 +228,6 @@ onProblemChangeHandler = (event) => {
   openConversationHandler = async(message) => {
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
     // Refactor searchByIdHandler out of this handler
-
     // Retrieve Agent Availbility & agentId 
     await axios.post("http://localhost:8000/agents", this.state.userInfo).then(async(res) => {
       const agentId = res.data.agentId
@@ -267,7 +320,11 @@ onProblemChangeHandler = (event) => {
     return this.state.openConvo2Status
   }
 
-  
+    
+    
+    
+  //------------------------------------------------Chatting handlers-----------------------------------------------
+
   // Expects conversationObject and strMessage
   sendMessageHandler = (message) => {
     try{
@@ -284,7 +341,6 @@ onProblemChangeHandler = (event) => {
   onNewMessageReceived = (event) =>  {
     let message = event.detail.message;
     let conversation = event.detail.conversation
-
     console.log(message)
     console.log(message.data)
     const incomingMessage = message.data
@@ -305,7 +361,6 @@ onProblemChangeHandler = (event) => {
     try{
       await rainbowSDK.conversations.closeConversation(this.state.conversationObject)
       console.log("Conversation closed")
-      
       axios.post('/users/delete', this.state.userInfo.timestamp).then((res) => {
         console.log("Client: Deleted user successful")
       }).catch(error => {
@@ -319,8 +374,6 @@ onProblemChangeHandler = (event) => {
   componentDidMount = () => {
     document.addEventListener(rainbowSDK.im.RAINBOW_ONNEWIMMESSAGERECEIVED, this.onNewMessageReceived);
   }
-  
-//------------------------------------------------Launcher event handlers-----------------------------------------------
 
   _onMessageWasSent = (message) => { //message is the input to the launcher
     this.setState({
@@ -330,8 +383,10 @@ onProblemChangeHandler = (event) => {
     console.log("Client: Message:", message.data)
     console.log("Client: Message List", this.state.messageList)
     // this.openConversationHandler(message.data.text)
+    this.checkForSpam(message)
     this.sendMessageHandler(message.data.text)
-  }
+    
+  } 
 
   _sendMessage(text) {
     if (text.length > 0) {
@@ -345,8 +400,17 @@ onProblemChangeHandler = (event) => {
           }
         ]
       })
-    }
+    } 
   }
+    
+  _handleClick() {
+    this.setState({isOpen:!this.state.isOpen});
+    const now = new Date();
+    this.setState({openWindowTime: now.getTime()});
+    this.closeConversationHandler();
+  }
+
+  //------------------------------------------------HTML Layout-----------------------------------------------
 
   render() {
     return (
@@ -357,10 +421,9 @@ onProblemChangeHandler = (event) => {
           <source src={require('../Images/Background.mp4')} type="video/mp4" />
                 Your browser does not support the video tag.
         </video>
-        
+
         {/* Background image and title set in css */}
           <div className='home'> 
-
           </div>
 
         {/* Website sections */}
@@ -370,23 +433,22 @@ onProblemChangeHandler = (event) => {
             onFNameChange = {this.onFirstNameChangeHandler.bind(this)}
             onLNameChange = {this.onLastNameChangeHandler.bind(this)}
             onChatModeChange = {this.onChatModeChangeHandler.bind(this)}
+            chatModeValue = {this.state.userInfo['chatMode']}
             onLanguageChange = {this.onLanguageChangeHandler.bind(this)}
+            languageValue = {this.state.userInfo['language']}
             onProblemChange = {this.onProblemChangeHandler.bind(this)}
+            problemValue = {this.state.userInfo['top']}
             onSubmit = {this.submitHandler.bind(this)}
+            loadingState = {this.state.connected}
           />
-          
-          {/* <Aboutus/>
-          <Agents/>
-          <FAQ/> */}
+          <FAQ/>
         </div>
 
         {/* Navigation bar */}
         <div className = 'NavBar'>
           <Navbar/>
-          <Search/>
         </div>
         
-
         <Launcher
               agentProfile={{
                 teamName: `Let's Be Team Players`,
@@ -394,6 +456,8 @@ onProblemChangeHandler = (event) => {
               }}
               onMessageWasSent={this._onMessageWasSent.bind(this)}
               messageList={this.state.messageList}
+              handleClick = {this._handleClick.bind(this)}
+              isOpen = {this.state.isOpen}
               showEmoji
           />
       </div>

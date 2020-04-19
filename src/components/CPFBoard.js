@@ -1,7 +1,7 @@
 import React from "react";
 import {Button} from "react-bootstrap";
 import {Grid} from '@material-ui/core';
-import "./Radiobutton.css";
+import "./Componentstyles.css";
 
 const CPFBoard = () => {
     return (

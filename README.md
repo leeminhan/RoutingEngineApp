@@ -26,11 +26,11 @@ Running on localhost:3000
 This is the navigation bar component which sticks at the top of the page. 
 To add- links to the sections of the webpage.
 
-###CPFBoard.js
+### CPFBoard.js
 This is a small section describing what the CPF board is about. 
 To-do: add a link to the cpf board web page.
 
-### Languageradiobutton.js Chatradiobutton.js Enquiryradiobutton.js
+### Languageradiobutton.js, Chatradiobutton.js, Enquiryradiobutton.js
 These 3 components contain radio buttons for their respective categories. Each button uses an icon as a display. When button is clicked, a green border would appear around the icon and the selected value would be reflected in the state.
 
 ### PrefForm.js 

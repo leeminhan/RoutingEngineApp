@@ -2,6 +2,7 @@ import React from "react";
 import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector";
 import { SearchProvider, Results, SearchBox } from "@elastic/react-search-ui";
 import { Layout } from "@elastic/react-search-ui-views";
+import "./Componentstyles.css";
 
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 
@@ -19,9 +20,9 @@ const Search = () => {
         }}
       >
         <div className="App">
-          <Layout
+          <Layout 
             header={<SearchBox />}
-            bodyContent={<Results titleField="title" urlField="nps_link" />}
+            bodyContent={<Results className = 'results' titleField="title" urlField="nps_link" />}
           />
         </div>
     </SearchProvider>

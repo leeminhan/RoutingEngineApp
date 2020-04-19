@@ -1,5 +1,5 @@
 import React from "react";
-import "./Radiobutton.css";
+import "./Componentstyles.css";
 
 
 
@@ -8,7 +8,7 @@ const Languageradiobutton = (props) =>  {
     return (
         <div
         name = "language"
-        // value = {props.value}
+        value = {props.value}
         onChange={props.onChange}
         className = "language">
 
@@ -31,7 +31,7 @@ const Languageradiobutton = (props) =>  {
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language" dvalue="4" />
+                <input type="radio" name="language" value="4" />
                 <img id = 'Radioimg' src={require('../Images/Tamil.svg')} />
                 Tamil
             </label>
