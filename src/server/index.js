@@ -6,11 +6,6 @@ const options = require('./options');
 const RainbowSDK = require('rainbow-node-sdk');
 const timeTolive = 3600;
 
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient //gives us access to function necessary to connect to DB to perform CRUD
-const connectionURL = 'mongodb://127.0.0.1:27017'
-const databaseName = 'RoutingEngineDB'
-
 const rainbowSDK = new RainbowSDK(options);
 rainbowSDK.start();
 rainbowSDK.events.on('rainbow_onready', function() {
@@ -57,6 +52,7 @@ router.post("/", (req,res) => {
 
 // Route to upload new user information to Database
 router.post('/users',async(req,res) => {
+    console.log(db)
     const userInfo = req.body
     try{
         await db.insertHandler(userInfo, "user")
@@ -84,54 +80,12 @@ router.post('/agents', async(req,res) => {
         console.log("agentAvailability", agentAvailability)
         
         if(agentAvailability == 'online'){
-            // Update agent availbility/status to DB?
             console.log(`Agent ${agent.agentId} is available. Connecting with user now!`)
             res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
         }else{
             console.log(`Agent ${agent.agentId} is unavaiable.`)
             res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
         }
-
-        res.status(200).send()
-
-        //     // 1. Look for agent with matching TOP
-        //     // found: -> then block: check agent availbility 
-        //     // -> if yes, return agentId to frontend as input for searchByIdHandler to get agentObject to openConvo
-        //     // 
-        //     // not found: -> catch error block
-
-        //     db.collection('agent').findOne({ //note to self: .find no longer works; documentation not updated
-        //         top: userInfo.top
-        //     }).then(async(agentDb) => {
-        //         console.log("Found Agent with matching TOP! Checking availability -----")
-        //         console.log("AgentDB result:", agentDb)
-        //         // Check agent availability
-
-        //         const agentId = agentDb.agentId
-        //         // console.log("AgentId:", agentId) 
-        //         // const temp1 = "5e5fdf3bd8084c29e64eb20a"
-        //         // const temp = "5e84513235c8367f99b94cee"
-                
-        //         const availability = await checkAgentStatusHandler(agentId)
-        //         console.log("Agent's Availability:", availability)
-            
-        //         if(availability == "online"){
-        //             // Match agent to user -> Update agent to busy
-        //             db.collection('agent').updateOne({
-        //                 agentId: agentId
-        //             },{
-        //                 $set:{
-        //                     availability: "busy" 
-        //                 }
-        //             }).then((result) => {
-        //                 console.log("Agent Availability Updated:", result)
-        //             }).catch(error => {
-        //                 console.log("Failed to update agent")
-        //                 console.log(error)
-        //             })
-        //             res.status(200).send(availability)
-        //         }
-        
     }catch(error){
         console.log("\n/agents route: Failed at /agents route")
         res.status(500).send()
@@ -141,38 +95,65 @@ router.post('/agents', async(req,res) => {
 router.post('/agents/reattempt', async(req, res) => {
     const userInfo = req.body
     const query = {
-        top: userInfo.top,
-        
+        top: userInfo.top
     }
     console.log("userInfo:", query)
-    
     try{
-        // state: this should supposedly be the 2nd user. Therefore need to check the users with 
-        // shortest timestamp but of above TOP
-        const user_queued = await db.findHandler(query)
-
-
-        //shouldn't be using the req objec here
-        //should be using another handler to call 
-        const agent = await db.findHandler(query, 'agent')
-        console.log("Agent Route: Successfully queried database. Result:\n", agent)
-        console.log("agentID:", agent.agentId)
+        console.log("\n In /agents/reattempt route")
         
-        const agentAvailability = await checkAgentStatusHandler(agent.agentId)
-        console.log("agentAvailability", agentAvailability)
-        
-        if(agentAvailability == 'online'){
-            // Update agent availbility/status to DB?
-            console.log(`Agent ${agent.agentId} is available. Connecting with user now!`)
-            res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
-        }else{
-            console.log(`Agent ${agent.agentId} is unavaiable.`)
-            res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
+        // Find next user in queue for a specific TOP based on shortest Timestamp
+        const userNextInQue = await db.findConditionHandler(query, 'user')
+        console.log("\n User Next In Queue", userNextInQue)
+
+        //check if im the next user
+        if(userInfo.timestamp == userNextInQue.timestamp){
+            //Find agent with same TOP
+            const agent = await db.findHandler(query, 'agent')
+            console.log("agentID:", agent.agentId)
+
+            //Check aget avaialbility
+            const agentAvailability = await checkAgentStatusHandler(agent.agentId)
+            console.log("agentAvailability", agentAvailability)
+
+            if(agentAvailability == 'online'){
+                // Update agent availbility/status to DB?
+                console.log(`Agent ${agent.agentId} is available. Connecting with user now!`)
+                res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
+                //should send a toConnect property instead
+            
+            }
+        }else{ //Not the next user defo should still continue to wait
+            console.log("Agent is unavaiable. Please wait!")
+            res.status(200).send()
         }
     }catch(error){
         console.log("\n/agents/reattempt route: Failed /agents/reattempt route")
+        console.log(error)
         res.status(500).send()
     }
+})
+
+// Route to remove user from database/queue once user is done with the call
+router.post('/users/delete', async(req,res) => {
+    const timestamp = req.body.timestamp
+    const query = {
+        timestamp: timestamp
+    }
+
+    console.log(query)
+    try{
+        await db.deleteHandler(query, 'user')
+        console.log('\n /users/delete route: user deleted')
+        res.status(200).send()
+    }catch(error){
+        console.log(error)
+        res.send(500).send()
+    }
+})
+
+// Route to clear all users from database
+router.post('/clearUsers', (req,res) => {
+    
 })
 
 module.exports =  router;
