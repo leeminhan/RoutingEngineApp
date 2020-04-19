@@ -8,30 +8,30 @@ const Languageradiobutton = (props) =>  {
     return (
         <div
         name = "language"
-        // value = {props.value}
+        value = {props.value}
         onChange={props.onChange}
         className = "language">
 
             <label>
-                <input type="radio" name="language" value="en-us"  />
+                <input type="radio" name="language" value="1"  />
                 <img id = 'Radioimg' src={require('../Images/English.svg')}/>
                 English
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language" value="Malay" />
+                <input type="radio" name="language" value="2" />
                 <img id = 'Radioimg' src={require('../Images/Malay.svg')} />
                 Malay
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language"value="Chinese"  />
+                <input type="radio" name="language"value="3"  />
                 <img id = 'Radioimg' src={require('../Images/Chinese.svg')}/>
                 Chinese
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="language" dvalue="Tamil" />
+                <input type="radio" name="language" value="4" />
                 <img id = 'Radioimg' src={require('../Images/Tamil.svg')} />
                 Tamil
             </label>

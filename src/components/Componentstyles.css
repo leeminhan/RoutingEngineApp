@@ -37,8 +37,6 @@ label {
   justify-content: center;
 }
 
-
-
 /* ---------------------------------------------------Navigation----------------------------------------------------- */
 
 .navbarlogo{
@@ -46,7 +44,6 @@ label {
   left: 30px;
   top: 15px;
 }
-
 
 .Navbar li {
   display: inline;
@@ -56,14 +53,12 @@ label {
   
 }
 
-
 .Navbar ul {
   background-color: #ffffff;
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  
 }
 
 .Navbar li a {
@@ -83,9 +78,6 @@ label {
   font-weight: 900;
   font-family: 'Avenir Black', 'Arial Black', sans-serif;
 }
-
-
-
 
 /* ---------------------------------------------------Pref Form----------------------------------------------------- */
 
@@ -141,46 +133,6 @@ label {
   width: 3px;
 }
 
-.dividerBotName {
-  background: #5cdb95;
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 30px;
-  width: 3px;
-  position: relative;
-  top: 158px;
-}
-
-.dividerBotTitle {
-  background: #5cdb95;
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 30px;
-  width: 3px;
-  position: relative;
-  top: 55px;
-}
-
-.dividerBotChat {
-  background: #5cdb95;
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 30px;
-  width: 3px;
-  position: relative;
-  top: 50px;
-}
-
-.dividerBotLang {
-  background: #5cdb95;
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 30px;
-  width: 3px;
-  position: relative;
-  top: 74px;
-}
-
 .submitButton {
   display: flex;
   justify-content: center;
@@ -221,11 +173,6 @@ label {
   background:  linear-gradient(to right, #eff1f2 50%, #edf5e1 50%);
 }
 
-/* .chatInput, .problemInput, .formTitle{
-  background:  linear-gradient(to right, #edf5e1 50%, #eff1f2 50%);
-} */
-
-
 /* ---------------------------------------------------CPF Board----------------------------------------------------- */
 
 .cpfBoard{
@@ -233,12 +180,11 @@ label {
     background-color: transparent;
     font-family: 'Roboto', sans-serif;;
     height: 369px;
-  }
+}
   
 .cpfBoard h5, .cpfBoard h3 {
   color: #5cdb95;
   font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
-
 }
 
 .cpf-btn {
@@ -263,73 +209,12 @@ label {
   font-family: 'Avenir Black', 'Arial Black', sans-serif !important;
 }
 
-/* ---------------------------------------------------About Us----------------------------------------------------- */
+/* ---------------------------------------------------Loading Display----------------------------------------------------- */
 
-.aboutUs {
-  /* background-color: #8d8741; */
-  background-color: #000000;
-  color: #FFFFFF;
-  text-align: center;
-  font-family: 'Roboto', sans-serif;;
+.loadinDisplay {
+  margin: auto;
 }
 
-/* ---------------------------------------------------Agents--------------------------------------------------------- */
-
-.agents {
-  text-align: center;
-  font-family: 'Roboto', sans-serif;;
-  font-weight: bold;
-  color: #FFFFFF;
-  height: 500px;
-  background-image: url("../Images/Callcentre.jpg");
-  background-attachment:fixed;
-  background-size: cover;
-  background-repeat:no-repeat;
-  background-position:center;
-  
-}
-
-.cardButton {
-  color: #000000 !important;
-}
-
-.cardGrid {
-  display: flex;
-  justify-content: center;
-}
-
-.agent-btn {
-  background: transparent !important;
-  color: #FFFFFF !important;
-  border-color: #FFFFFF !important;
-  padding: 5px 10px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.agent-btn:hover, .agent-btn:focus, .agent-btn:active{
-  background: #FFFFFF !important;
-  color: #000000 !important;
-  border-color: #FFFFFF !important;
-  padding: 5px 10px;
-  text-transform: uppercase;
-  font-weight: bolder;
-}
-
-/* ---------------------------------------------------FAQ--------------------------------------------------------- */
-
-.FAQ {
-  /* background-color:  #8d8741 ; */
-  background-color: #000000;
-  color: #FFFFFF;
-  font-family: 'Roboto', sans-serif;;
-}
-
-.FAQtitle {
-  text-align: left;
-  font-weight: bold;
-}
-
-.FAQ h1 {
-  text-align: center !important;
+.loadingSign {
+  margin: auto;
 }

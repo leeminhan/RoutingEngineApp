@@ -8,7 +8,7 @@ const Chatradiobutton = (props) => {
     return (
         <div 
         name = "chatMode"
-        // value= {props.value}
+        value = {props.value}
         onChange={props.onChange}
         className = 'chatMode'>
 
@@ -23,12 +23,6 @@ const Chatradiobutton = (props) => {
                 <img id = 'Radioimg' src={require('../Images/Videocall.svg')} />
                 Video Calling
             </label>
-            {/* {mySpan}
-            <label>
-                <input type="radio" name="chatmode" value="3" />
-                <img id = 'Radioimg' src={require('../Images/Phonecall.png')} />
-                Voice Calling
-            </label> */}
         </div>
     );
 }

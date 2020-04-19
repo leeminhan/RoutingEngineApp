@@ -4,6 +4,7 @@ import {Button} from "react-bootstrap";
 import Chatradiobutton from './Chatradiobutton';
 import Languageradiobutton from './Languageradiobutton';
 import Enquiryradiobutton from './Enquiryradiobutton';
+import Loadingdisplay from "../components/Loadingdisplay";
 import "./Componentstyles.css";
 
 const PrefForm = (props) => {
@@ -58,7 +59,7 @@ const PrefForm = (props) => {
               </Grid>
             </Grid>
             <br></br> <br></br> <br></br> <br></br>
-            <Chatradiobutton onChange = {props.onChatModeChange} />
+            <Chatradiobutton onChange = {props.onChatModeChange} value = {props.chatModeValue} />
           </div>
 
           <div className = 'languageInput'>
@@ -74,7 +75,7 @@ const PrefForm = (props) => {
               </Grid>
             </Grid>
             <br></br> <br></br><br></br> <br></br><br></br> <br></br>
-            <Languageradiobutton onChange = {props.onLanguageChange} />
+            <Languageradiobutton onChange = {props.onLanguageChange} value = {props.languageValue} />
           </div>
 
           <div className = 'problemInput'>
@@ -90,7 +91,7 @@ const PrefForm = (props) => {
               </Grid>
             </Grid>
             <br></br> <br></br><br></br> <br></br><br></br> <br></br>
-            <Enquiryradiobutton onChange = {props.onProblemChange}/>
+            <Enquiryradiobutton onChange = {props.onProblemChange} value = {props.problemValue}/>
           </div>
                 
           <div className = 'submit'>
@@ -100,8 +101,8 @@ const PrefForm = (props) => {
             <Button className="submit-btn" size ='lg' onClick = {props.onSubmit}>
               Submit
             </Button>
-            <br></br> <br></br>
-            <h5> Please give us some time while we connect you to a suitable agent.</h5>
+            <br></br> 
+            <Loadingdisplay className = 'loadingSign' loadingState = {props.loadingState}/>
           </div>
         </div>
     );

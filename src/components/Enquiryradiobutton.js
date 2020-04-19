@@ -8,7 +8,7 @@ const Enquiryradiobutton = (props) => {
     return (
         <div
         name = "problem"
-        // value={props.value}
+        value = {props.value}
         onChange={props.onChange}
         className = "problem">
 
@@ -31,7 +31,7 @@ const Enquiryradiobutton = (props) => {
             </label>
             {mySpan}
             <label>
-                <input type="radio" name="problem" defaultValue="4" id="problem4"/>
+                <input type="radio" name="problem" value="4" id="problem4"/>
                 <img id = 'Radioimg' src={require('../Images/Account.svg')} />
                 Account Statement
             </label>
