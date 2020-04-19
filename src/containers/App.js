@@ -31,6 +31,8 @@ class App extends Component {
       conversationObject: null,
       agentId: null,
       connected: false,
+      toPing: false,
+      openConvo2Status: null,
       userInfo: {
         firstName: null,
         lastName: null,
@@ -201,26 +203,32 @@ onProblemChangeHandler = (event) => {
       else {
         console.log("Client: Agent is unavailable. Please wait")
 
-        // await this.openConversationHandler2()
-        
-        const ping = setInterval( () =>{
-          
-          const toConnectOutcome = this.openConversationHandler2() // new handler that will that find users earliest timestamp
-          if(toConnectOutcome === 1){
-            console.log('Client: Breaking out of interval')
-            clearInterval(ping) //break out
-
-          }
-          console.log("Client: Still queuing/waiting to be matched. ping.")
-        }, 10000)
+        this.setState({toPing: true}) // this triggers the if statement in componentDidUpdate
       }
     }).catch(error => {
       console.log(error)
     })
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if(prevState.toPing != this.state.toPing){
+      
+      const ping = setInterval( async() =>{
+        const toConnectOutcome = await this.openConversationHandler2() // new handler that will that find users earliest timestamp
+        console.log("toConnectOutcome:", toConnectOutcome)
+        console.log("Client: Still queuing/waiting to be matched. ping.")
+        if(toConnectOutcome == 1){
+          console.log("I reached line 230")
+          console.log('Client: Breaking out of interval')
+          clearInterval(ping) //break out
+        }
+      }, 10000)
+    }
+  }
+
   // To handle openConversation for users waiting to be connected by initial rejection
   openConversationHandler2 = async() => {
+
     await axios.post("http://localhost:8000/agents/reattempt", this.state.userInfo).then(async(res) => {
       
       console.log(res)
@@ -240,11 +248,14 @@ onProblemChangeHandler = (event) => {
         console.log("Client: Successful openConversation: \n Conversation Object: \n", conversation)
         this.setState({conversationObject: conversation})
 
-        return 1 //Found agent 
+        console.log("Client: Line 261") 
+        this.setState({openConvo2Status: 1})
+        // return 1 //Found agent 
       }  
       else {
         console.log("Client: Agent is unavailable. Please wait")
-        return 0
+        this.setState({openConvo2Status: 0})
+        // return 0
         //implement the queuing and repinging
         // this post req has to be done to a different as the backend will now have to check no just
         // if agent is available but also check for user with shortest timestamp
@@ -252,6 +263,8 @@ onProblemChangeHandler = (event) => {
     }).catch(error => {
       console.log(error)
     })
+    console.log(this.state.openConvo2Status)
+    return this.state.openConvo2Status
   }
 
   
