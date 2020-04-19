@@ -37,7 +37,7 @@
     "typeface-roboto": "0.0.75"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node src/containers/App.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
