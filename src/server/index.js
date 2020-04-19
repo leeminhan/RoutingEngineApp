@@ -93,19 +93,19 @@ router.post('/agents', async(req,res) => {
 })
 
 router.post('/agents/reattempt', async(req, res) => {
+    console.log("\n In /agents/reattempt route")
     const userInfo = req.body
     const query = {
         top: userInfo.top
     }
-    console.log("userInfo:", query)
+    console.log("query:", query)
+    
     try{
-        console.log("\n In /agents/reattempt route")
-        
         // Find next user in queue for a specific TOP based on shortest Timestamp
         const userNextInQue = await db.findConditionHandler(query, 'user')
         console.log("\n User Next In Queue", userNextInQue)
 
-        //check if im the next user
+        //check if this user is the next user in queue
         if(userInfo.timestamp == userNextInQue.timestamp){
             //Find agent with same TOP
             const agent = await db.findHandler(query, 'agent')
@@ -116,16 +116,16 @@ router.post('/agents/reattempt', async(req, res) => {
             console.log("agentAvailability", agentAvailability)
 
             if(agentAvailability == 'online'){
-                // Update agent availbility/status to DB?
-                console.log(`Agent ${agent.agentId} is available. Connecting with user now!`)
-                res.status(200).send({agentId: agent.agentId, presence: agentAvailability})
-                //should send a toConnect property instead
-            
+                const toConnect = true
+                console.log(`Agent ${agent.agentId} is available. Connecting with user now! toConnect: ${toConnect}`)
+                res.status(200).send({agentId: agent.agentId, presence: agentAvailability, toConnect: toConnect})            
             }
         }else{ //Not the next user defo should still continue to wait
-            console.log("Agent is unavaiable. Please wait!")
-            res.status(200).send()
+            const toConnect = false
+            console.log("Agent is unavailable. Please wait!")
+            res.status(200).send({toConnect: toConnect})
         }
+
     }catch(error){
         console.log("\n/agents/reattempt route: Failed /agents/reattempt route")
         console.log(error)
