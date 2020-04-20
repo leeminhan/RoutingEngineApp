@@ -178,7 +178,7 @@ class App extends Component {
     const timestamp = new Date().getTime()
     await this.setState({ userInfo: { ...this.state.userInfo, timestamp: timestamp} });
     console.log(this.state.userInfo.timestamp)
-    await axios.post("/users", this.state.userInfo).then(() => {
+    await axios.post("http://localhost:8000/users", this.state.userInfo).then(() => {
       console.log("Client: Uploaded user information to Database")
     }).catch(error => {
       console.log(error)
@@ -187,7 +187,7 @@ class App extends Component {
 
   createGuestAccHandler = async() => {
     //This return means: return a promise that's either resolved/rejected
-    return await axios.post("/").then((loginCredentials) => {
+    return await axios.post("http://localhost:8000/").then((loginCredentials) => {
       console.log('Client: Guest User Account created')
       this.setState({
         loginEmail: loginCredentials.data.loginEmail,
@@ -229,7 +229,7 @@ class App extends Component {
     // and update state with agentObject so that searchByIdHandler won't have to be called to openConversation
     // Refactor searchByIdHandler out of this handler
     // Retrieve Agent Availbility & agentId 
-    await axios.post("/agents", this.state.userInfo).then(async(res) => {
+    await axios.post("http://localhost:8000/agents", this.state.userInfo).then(async(res) => {
       const agentId = res.data.agentId
       const availability  = res.data.presence
       
@@ -282,7 +282,7 @@ class App extends Component {
   // To handle openConversation for users waiting to be connected by initial rejection
   openConversationHandler2 = async() => {
 
-    await axios.post("/agents/reattempt", this.state.userInfo).then(async(res) => {
+    await axios.post("http://localhost:8000/agents/reattempt", this.state.userInfo).then(async(res) => {
       
       console.log(res)
       const toConnect = res.data.toConnect
@@ -359,7 +359,7 @@ class App extends Component {
       console.log("Conversation closed")
       console.log("timestamp:",  this.state.userInfo.timestamp )
       const info = {timestamp: this.state.userInfo.timestamp}
-      axios.post('/users/delete', info).then((res) => {
+      axios.post('http://localhost:8000/users/delete', info).then((res) => {
         console.log("Client: Deleted user successful")
       }).catch(error => {
         console.log('Client: Delete user failed')

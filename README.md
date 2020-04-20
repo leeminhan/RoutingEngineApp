@@ -82,3 +82,27 @@ ticketNo:
 | agent_5 top_5 | agent5_top5@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bebf5d16d013e6a66839f |
 | agent_6 top_6 | agent6_top6@gmail.com | RoutingEngineApp | free     | user                  | true   | 5e9bece4d16d013e6a668498 |
 | Min Han Lee   | minhan.lmh@gmail.com  | RoutingEngineApp | free     | user,admin,app_admin  | true   | 5e9bece4d16d013e6a668498 |
+
+## Jest Testing
+
+Prerequisite for jest testing would be to install mongobd:
+
+```
+npm install mongodb
+```
+
+Install Jest using:
+
+```
+npm install --save-dev jest 
+```
+
+To run the test code run the following:
+
+```
+npm test
+press p key (to filter by filename regex pattern)
+navigate to the file src/server/user.test.js 
+press enter key
+
+```
