@@ -147,7 +147,7 @@ class App extends Component {
     if (timeDiff > 60) {
       return true;
     } else {
-      toast.error('No more than 1 submission per minute',{
+      toast.error('No Multiple Submissions (:',{
         toastId: 'multipleSubmit',
         className: 'multipleSubmit',
       });
@@ -453,7 +453,7 @@ class App extends Component {
         
         <Launcher
               agentProfile={{
-                teamName: `Let's Be Team Players`,
+                teamName: `Welcome To CPF`,
                 imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
               }}
               onMessageWasSent={this._onMessageWasSent.bind(this)}
