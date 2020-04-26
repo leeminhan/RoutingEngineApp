@@ -74,28 +74,28 @@ This section contains the search component.
 
 ## Rainbow: Web API
 
-Here are a few key APIs that we've used:
-```connection.signin(strLogin, strPassword)```
+Here are a few key APIs that we've used:<br/>
+```connection.signin(strLogin, strPassword)```<br/>
 Allows for signing  in to the Rainbow sandboxed environment from a Rainbow sandboxed user account that already exists. The Rainbow sandboxed environment will be used to access the Rainbow Cloud Services. This method takes in a string login and string password which are the login credentials created for our user. It  returns a promise. This method is used to sign in our users.
 
-```contacts.searchById(agentid)```
+```contacts.searchById(agentid)```<br/>
 Searches for a contact by his Id on the server.  It takes in a string ID which will be our agent ID  obtain from our routing algorithm, and returns a promise, which will be our agent object. This method is used  to retrieve our selected agent.
 
-```conversations.openConversationForContact(agentObject)```
+```conversations.openConversationForContact(agentObject)```<br/>
 Opens a conversation to a contact. It creates a new one if the conversation doesn't exist or reopen a closed conversation. It takes in a contact which would be our agent contact and returns a promise, which would be our conversation object. We store this conversation object in as a state which will be referenced when sending messages. This method is used to open a conversation between our user and agent.
 
-```im.sendMessageToConversation(conversationObject, message) ```
+```im.sendMessageToConversation(conversationObject, message) ```<br/>
 Sends messages to a one-to-one conversation. It takes in a conversation object which would be the conversation object we have obtained with the agent. It also takes in a string message which is the messaged typed by the user. This method is used to send messages from the user to the agent.
 
-```im.RAINBOW_ONNEWIMMESSAGERECEIVED```
+```im.RAINBOW_ONNEWIMMESSAGERECEIVED```<br/>
 This event is fired when a new message is received in a conversation. Message can be retireved via  event.detail.message. This method is used to retireve messages sent by the agent from the Rainbow sandbox environment.
 
-```conversations.closeConversation(conversationObject)```
+```conversations.closeConversation(conversationObject)```<br/>
 Closes a conversation. It takes in a conversation object which will be the conversation object between our user and agent. This method is used to retireve messages sent by the agent from the Rainbow sandbox environment.
 
 ## Rainbow: Node API
 
-```admin.createAnonymousGuestUser()```
+```admin.createAnonymousGuestUser()```<br/>
 Creates a new anonymous guest user in the same company as the requester admin. Anonymous guest user is user without name and firstname. We use this method to create a temporary account for our users.
 
 This returns a promise that is either resolved or rejected. If resolved, it returns a set of login credentials. loginCredentials.data.loginEmail and loginCredentials.data.password will be used. 
