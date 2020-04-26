@@ -153,6 +153,6 @@ press enter key
 ### Jest Test Case
 1. Inserting of Document into Database
 2. Searching for Document in Database
-3. pdating of Document in Database
+3. Updating of Document in Database
 4. Finding Documents matching query in Database
 5. Deleting Document in Database
