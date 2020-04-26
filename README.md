@@ -9,38 +9,44 @@ A routing engine that routes incoming chat and audio call requests to the right 
 
 ## Usage
 
-```
 Frontend:
+```
 npm install
 npm start
 ```
-```
 Backend:
-node server.js
 ```
-Running on localhost:3000
+node src/server/server.js
+```
 
 ## Technologies used
 
 ###  <img src="./Logos/Rainbow.png" width="50px" /> Rainbow
 
-Rainbow is a CPaaS (Communications Platform as a Service) that provides the communication services between our users and agents. Our website is largely integrated with the Rainbow SDK and our agents are hosted on the Rainbow sandbox environment. 
+Our website makes use of the Rainbow SDK for its communication services between the user and agent. Our agents are hosted on the rainbow Sandbox platform. 
 
 ### <img src="./Logos/React.gif" width="50px" /> React 
 
-React.js is a  javascript library used for the building and rendering of components for our web page. It is used in line with JSX to design our User Interface.
+The React.js javascript library is used for the building and rendering of our front-end components. .
 
-###  <img src="./Logos/nodejs.svg" width="50px" /> Node
+###  <img src="./Logos/ExpressJS.png" width="50px" /> ExpressJs
 
-Node.js is an open-source, cross-platform, JavaScript runtime environment that we implement to run our back-end code. 
+Our back-end server is built on the ExpressJS framework. 
 
 ### <img src="./Logos/mongodb.png" width="50px" /> MongoDB
 
-MongoDB is an open source, NoSQL database that provides storage for JSON-structured data. We utilise this database to store our user and agent data. The database is referenced as during our routing and queuing processes.
+We utilise MongoDB to store relevant information about our users and agents. It is often referenced during the routing and queuing processes.
+
+### <img src="./Logos/elastic-logo.png" width="50px" /> Elastic
+The FAQ search bar utilises Elastic as its search engine. 
 
 ### <img src="./Logos/AWS.gif" width="50px" /> Amazon Web Services cloud
 
-The AWS cloud is a flexible and scalable environment where we host our database. Deploying our database on a cloud ensures that our user and agent information, along with our queuing system, are centralised and updated in real time. 
+Our database(MongoDB) and search engine(Elastic) are hosted on the Amazon Web Srvice cloud platform.  
+
+### <img src="./Logos/jest-logo.png" width="50px" /> Jest
+
+Our unit testing, which testes for CRUD operations, is built upon the Jest framework.
 
 ## Components
 
@@ -63,8 +69,6 @@ Contains a search bar that can be used to search for frequently asked questions 
 
 ### FAQ.js
 This section contains the search component.
-
-
 
 
 
@@ -138,7 +142,6 @@ npm install --save-dev jest
 ```
 
 To run the test code run the following:
-
 ```
 npm test
 press p key (to filter by filename regex pattern)
@@ -146,3 +149,9 @@ navigate to the file src/server/user.test.js
 press enter key
 
 ```
+### Jest Test Case
+1. Inserting of Document into Database
+2. Searching for Document in Database
+3. pdating of Document in Database
+4. Finding Documents matching query in Database
+5. Deleting Document in Database
